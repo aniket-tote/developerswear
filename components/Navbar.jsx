@@ -4,11 +4,12 @@ import { BiCartAlt } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import CartItem from "./CartItem";
 
-const Navbar = () => {
+const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+  // console.log(cart, addToCart, removeFromCart, clearCart, subTotal);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <div>
+    <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font shadow-md">
         <div className="container mx-auto flex flex-wrap p-4 flex-col md:flex-row items-center">
           <Link
@@ -43,12 +44,12 @@ const Navbar = () => {
       </header>
 
       <div
-        className={`sidebar flex flex-col space-y-5 overflow-x-auto absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-white h-full p-5 md:p-10 shadow-2xl transition-transform ease-in-out duration-500 ${
+        className={` sidebar flex flex-col space-y-5 overflow-x-auto absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-slate-50 h-screen p-5 md:p-10 shadow-2xl transition-transform ease-in-out duration-500 ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <header
-          className={`cart w-full flex justify-between text-lg lg:text-xl`}
+          className={` cart w-full flex justify-between text-lg lg:text-xl`}
         >
           <span>Your Cart</span>
           <AiFillCloseCircle
@@ -58,30 +59,48 @@ const Navbar = () => {
         </header>
 
         <div className="items">
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          {Object.keys(cart).length == 0 && (
+            <div className="w-full text-center"> Your cart is empty</div>
+          )}
+          {Object.keys(cart).map((k) => {
+            return (
+              <CartItem
+                key={k}
+                name={k}
+                desc={cart[k].name}
+                size={cart[k].size}
+                price={cart[k].price}
+                variant={cart[k].variant}
+                quantity={cart[k].qty}
+                addToCart={addToCart}
+                removeFromCart={removeFromCart}
+              />
+            );
+          })}
         </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-slate-700 text-white rounded justify-self-end"
-        >
-          <Link href={"/checkout"}>Checkout</Link>
-        </button>
+        <div className="btns w-full flex justify-between space-x-2">
+          <button
+            type="submit"
+            onClick={clearCart}
+            className="px-4 py-2 w-1/2 hover:bg-slate-500 hover:text-white text-slate-900 rounded"
+          >
+            Clear cart
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 w-1/2 bg-slate-700 text-white rounded"
+          >
+            <Link
+              href={"/checkout"}
+              onClick={() => {
+                setIsCartOpen(false);
+              }}
+            >
+              Checkout
+            </Link>
+          </button>
+        </div>
       </div>
     </div>
   );

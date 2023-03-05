@@ -4,9 +4,9 @@ import React from "react";
 const Tshirts = () => {
   return (
     <div>
-      <section className="text-gray-600 body-font px-12">
-        <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-wrap -m-4">
+      <section className="text-gray-600 body-font">
+        <div className="container py-12">
+          <div className="flex flex-wrap">
             <Link
               href={"/product/tshirt1"}
               className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
