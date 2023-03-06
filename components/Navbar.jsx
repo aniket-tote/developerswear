@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BiCartAlt } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { MdAccountCircle } from "react-icons/md";
 import CartItem from "./CartItem";
 
 const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
@@ -11,14 +12,14 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   return (
     <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font shadow-md">
-        <div className="container mx-auto flex flex-wrap p-4 flex-col md:flex-row items-center">
+        <div className="container flex flex-wrap p-4 flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 ">
           <Link
-            href={"/"}
             className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+            href={"/"}
           >
             <span className="ml-3 text-xl cursor-pointer">DevelopersWear</span>
           </Link>
-          <nav className="md:ml-auto md:mr-auto flex flex-wrap space-x-14 items-center text-base justify-center">
+          <nav className="flex flex-wrap space-x-7 md:space-x-14 items-center text-base justify-center">
             <Link href={"/tshirts"} className=" hover:text-gray-900">
               T-shirts
             </Link>
@@ -32,14 +33,21 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Stickers
             </Link>
           </nav>
-          <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-            <BiCartAlt
-              className="text-2xl"
-              onClick={() => {
-                setIsCartOpen(isCartOpen ? false : true);
-              }}
-            />
-          </button>
+          <div className="btns">
+            <Link href={"/login"}>
+              <button className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded">
+                <MdAccountCircle className="text-2xl" />
+              </button>
+            </Link>
+            <button className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded">
+              <BiCartAlt
+                className="text-2xl"
+                onClick={() => {
+                  setIsCartOpen(isCartOpen ? false : true);
+                }}
+              />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -78,6 +86,26 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             );
           })}
         </div>
+        <div className="totalpriceDetails flex flex-col items-center space-y-4">
+          <div className="divider w-full h-0.5 bg-gray-200 z-20"></div>
+          <div className="subTotal flex justify-between w-full">
+            <span>Subtotal</span>
+            <span>{subTotal}</span>
+          </div>
+          <div className="Shipping flex justify-between w-full">
+            <span>Shipping</span>
+            <span>$5</span>
+          </div>
+          <div className="taxes flex justify-between w-full">
+            <span>Taxes</span>
+            <span>$3</span>
+          </div>
+          <div className="divider w-full h-0.5 bg-gray-200"></div>
+          <div className="Total flex justify-between w-full">
+            <span>Total</span>
+            <span>{subTotal}</span>
+          </div>
+        </div>
 
         <div className="btns w-full flex justify-between space-x-2">
           <button
@@ -89,7 +117,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 w-1/2 bg-slate-700 text-white rounded"
+            className="px-4 py-2 w-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded"
           >
             <Link
               href={"/checkout"}
