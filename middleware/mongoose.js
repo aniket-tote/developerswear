@@ -4,8 +4,7 @@ const connectDb = (handler) => async (req, res) => {
   if (mongoose.connections[0].readyState) {
     return handler(req, res);
   }
-  const uri = `mongodb+srv://admin:${process.env.PASS}@developerswearcluster.xzmyhys.mongodb.net/DevelopersWear?retryWrites=true&w=majority`;
-  await mongoose.connect(uri);
+  await mongoose.connect(process.env.URL);
   return handler(req, res);
 };
 

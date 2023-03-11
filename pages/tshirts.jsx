@@ -1,171 +1,108 @@
 import Link from "next/link";
 import React from "react";
+import mongoose from "mongoose";
+import Product from "@/models/Product";
 
-const Tshirts = () => {
+const Tshirts = ({ tshirts }) => {
   return (
-    <div>
-      <section className="text-gray-600 body-font">
-        <div className="container py-12">
-          <div className="flex flex-wrap">
+    <div className="p-3 lg:p-12 bg-slate-100">
+      <div className="flex flex-wrap justify-between w-full">
+        {Object.keys(tshirts).length == 0 && (
+          <p>No Tshirts in Stock. Will be comming soon. Stay Tuned!!</p>
+        )}
+        {Object.keys(tshirts).map((item) => {
+          return (
             <Link
-              href={"/product/tshirt1"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
+              key={tshirts[item].slug}
+              href={`/product/${tshirts[item].slug}`}
+              className="lg:w-[23.5%] md:w-1/2 m-2 bg-white p-4 w-full shadow hover:shadow-lg rounded"
             >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
+              <div className="w-full h-64 flex justify-center">
+                <img
+                  alt="ecommerce"
+                  className="h-full rounded"
+                  src={tshirts[item].img}
+                />
+              </div>
+              <div className="mt-4 space-y-2">
                 <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
+                  {tshirts[item].category}
                 </h3>
                 <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
+                  {tshirts[item].title}
                 </h2>
-                <p className="mt-1">$21.15</p>
+                <div className="sizes flex space-x-1">
+                  {tshirts[item].size.map((e) => {
+                    return (
+                      <div className="size border border-gray-400 px-1" key={e}>
+                        {e}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="colors flex space-x-1">
+                  {tshirts[item].color.map((e) => {
+                    return (
+                      <button
+                        key={e}
+                        className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none ${
+                          e === "white" || e === "black"
+                            ? "bg-" + e
+                            : "bg-" + e + "-700"
+                        } ${e === "maroon" ? "bg-red-700" : ""} ${
+                          e === "grey" ? "bg-gray-400" : ""
+                        } ${e === "navy" ? "bg-blue-900" : ""}`}
+                      ></button>
+                    );
+                  })}
+                </div>
+                <p className="mt-1">
+                  ₹{tshirts[item].price}{" "}
+                  <span className="line-through">₹999</span>
+                </p>
               </div>
             </Link>
-            <Link
-              href={"/product/tshirt2"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt3"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt4"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt5"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt6"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt7"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-            <Link
-              href={"/product/tshirt8"}
-              className="lg:w-1/4 md:w-1/2 p-4 w-full shadow-md hover:shadow-lg rounded"
-            >
-              <img
-                alt="ecommerce"
-                className="w-full"
-                src="https://m.media-amazon.com/images/I/41v-0YXm9+L.jpg"
-              />
-              <div className="mt-4">
-                <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                  CATEGORY
-                </h3>
-                <h2 className="text-gray-900 title-font text-lg font-medium">
-                  Shooting Stars
-                </h2>
-                <p className="mt-1">$21.15</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+          );
+        })}
+      </div>
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.URL);
+  }
+  let products = await Product.find({ category: "tshirt" });
+
+  let tshirts = {};
+
+  for (let item of products) {
+    if (item.title in tshirts) {
+      if (
+        !tshirts[item.title].size.includes(item.size) &&
+        item.availableQty > 0
+      ) {
+        tshirts[item.title].size.push(item.size);
+      }
+      if (
+        !tshirts[item.title].color.includes(item.color) &&
+        item.availableQty > 0
+      ) {
+        tshirts[item.title].color.push(item.color);
+      }
+    } else {
+      tshirts[item.title] = JSON.parse(JSON.stringify(item));
+      if (item.availableQty > 0) {
+        tshirts[item.title].color = [item.color];
+        tshirts[item.title].size = [item.size];
+      }
+    }
+  }
+
+  return {
+    props: { tshirts: JSON.parse(JSON.stringify(tshirts)) },
+  };
+}
 
 export default Tshirts;

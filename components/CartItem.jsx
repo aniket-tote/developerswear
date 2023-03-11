@@ -5,30 +5,22 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const CartItem = (props) => {
   return (
-    <div className="p-2 flex shadow-md bg-white my-2">
-      <img
-        className="w-36"
-        src={
-          "https://www.stickerpress.in/media/products/800x800/24dc9561f16a4f6781c6b78692187d1a.jpg"
-        }
-      />
+    <div className="p-2 flex items-center shadow-md bg-white my-2">
+      <div className="img w-36 h-36 aspect-square flex justify-between items-center">
+        <img className="h-full rounded" src={props.img} />
+      </div>
       <div className="right p-2 flex flex-col space-y-2">
-        <div className="name&desc text-lg flex flex-col">
-          <span className="name">{props.name}</span>
-          <span className="description text-gray-400">{props.desc}</span>
+        <div className="name&desc flex flex-col">
+          <span className="name text-md">{props.title}</span>
+          <span className="description text-gray-400">
+            {props.category + " (" + props.color + " / " + props.size + ")"}
+          </span>
         </div>
-        <div className="price">{props.price}</div>
+        <div className="price">₹{props.price}</div>
         <div className="quantityManager flex items-center space-x-2">
           <AiFillMinusCircle
             onClick={() => {
-              props.removeFromCart(
-                props.name,
-                1,
-                props.price,
-                props.desc,
-                props.size,
-                props.varient
-              );
+              props.removeFromCart(props.itemCode, 1);
             }}
             className="text-xl cursor-pointer"
           />
@@ -36,26 +28,22 @@ const CartItem = (props) => {
           <AiFillPlusCircle
             onClick={() => {
               props.addToCart(
-                props.name,
+                props.itemCode,
                 1,
                 props.price,
-                props.desc,
+                props.title,
                 props.size,
-                props.varient
+                props.color,
+                props.category,
+                props.img,
+                props.desc
               );
             }}
             className="text-xl cursor-pointer"
           />
           <MdOutlineDeleteOutline
             onClick={() => {
-              props.removeFromCart(
-                props.name,
-                props.quantity,
-                props.price,
-                props.desc,
-                props.size,
-                props.varient
-              );
+              props.removeFromCart(props.itemCode, props.quantity);
             }}
             className="text-xl cursor-pointer"
           />

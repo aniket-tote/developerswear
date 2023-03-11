@@ -2,10 +2,15 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
+
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -29,18 +34,48 @@ export default function App({ Component, pageProps }) {
     setSubTotal(subT);
   };
 
-  const addToCart = (itemCode, qty, price, name, size, variant) => {
+  const addToCart = (
+    itemCode,
+    qty,
+    price,
+    title,
+    size,
+    color,
+    category,
+    img,
+    desc
+  ) => {
     let newCart = cart;
     if (itemCode in cart) {
       newCart[itemCode].qty = cart[itemCode].qty + qty;
     } else {
-      newCart[itemCode] = { qty: 1, price, name, size, variant };
+      newCart[itemCode] = {
+        qty: 1,
+        price,
+        title,
+        size,
+        color,
+        category,
+        img,
+        desc,
+      };
     }
     setCart(newCart);
     saveCart(newCart);
+
+    toast.success("Added to Cart", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
-  const removeFromCart = (itemCode, qty, price, name, size, variant) => {
+  const removeFromCart = (itemCode, qty) => {
     let newCart = JSON.parse(JSON.stringify(cart));
     if (itemCode in cart) {
       newCart[itemCode].qty = cart[itemCode].qty - qty;
@@ -50,11 +85,58 @@ export default function App({ Component, pageProps }) {
     }
     setCart(newCart);
     saveCart(newCart);
+    toast.error("Removed item", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const buyNow = (
+    itemCode,
+    qty,
+    price,
+    title,
+    size,
+    color,
+    category,
+    img,
+    desc
+  ) => {
+    let newCart = {};
+    newCart[itemCode] = {
+      qty: 1,
+      price,
+      title,
+      size,
+      color,
+      category,
+      img,
+      desc,
+    };
+    setCart(newCart);
+    saveCart(newCart);
+    router.push("/checkout");
   };
 
   const clearCart = () => {
     setCart({});
     saveCart({});
+    toast.error("Cart cleared!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
   return (
@@ -65,13 +147,16 @@ export default function App({ Component, pageProps }) {
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
+        buyNow={buyNow}
       />
+      <ToastContainer />
       <Component
         cart={cart}
         addToCart={addToCart}
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
+        buyNow={buyNow}
         {...pageProps}
       />
       <Footer />

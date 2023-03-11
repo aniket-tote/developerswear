@@ -39,20 +39,20 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                 <MdAccountCircle className="text-2xl" />
               </button>
             </Link>
-            <button className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded">
-              <BiCartAlt
-                className="text-2xl"
-                onClick={() => {
-                  setIsCartOpen(isCartOpen ? false : true);
-                }}
-              />
+            <button
+              className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded"
+              onClick={() => {
+                setIsCartOpen(isCartOpen ? false : true);
+              }}
+            >
+              <BiCartAlt className="text-2xl " />
             </button>
           </div>
         </div>
       </header>
 
       <div
-        className={` sidebar flex flex-col space-y-5 overflow-x-auto absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-slate-50 h-screen p-5 md:p-10 shadow-2xl transition-transform ease-in-out duration-500 ${
+        className={` sidebar flex flex-col space-y-5 overflow-y-scroll absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-slate-50 h-screen p-5 md:p-10 shadow-2xl transition-transform ease-in-out duration-500 ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -66,7 +66,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           />
         </header>
 
-        <div className="items">
+        <div className="items ">
           {Object.keys(cart).length == 0 && (
             <div className="w-full text-center"> Your cart is empty</div>
           )}
@@ -74,12 +74,15 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             return (
               <CartItem
                 key={k}
-                name={k}
-                desc={cart[k].name}
-                size={cart[k].size}
-                price={cart[k].price}
-                variant={cart[k].variant}
+                itemCode={k}
                 quantity={cart[k].qty}
+                price={cart[k].price}
+                title={cart[k].title}
+                size={cart[k].size}
+                color={cart[k].color}
+                category={cart[k].category}
+                desc={cart[k].desc}
+                img={cart[k].img}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
               />
@@ -90,20 +93,20 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           <div className="divider w-full h-0.5 bg-gray-200 z-20"></div>
           <div className="subTotal flex justify-between w-full">
             <span>Subtotal</span>
-            <span>{subTotal}</span>
+            <span>₹{subTotal}</span>
           </div>
           <div className="Shipping flex justify-between w-full">
             <span>Shipping</span>
-            <span>$5</span>
+            <span>₹40</span>
           </div>
           <div className="taxes flex justify-between w-full">
-            <span>Taxes</span>
-            <span>$3</span>
+            <span>Taxes (GST)</span>
+            <span>₹69</span>
           </div>
           <div className="divider w-full h-0.5 bg-gray-200"></div>
           <div className="Total flex justify-between w-full">
             <span>Total</span>
-            <span>{subTotal}</span>
+            <span>₹{subTotal + 40 + 69}</span>
           </div>
         </div>
 
@@ -115,19 +118,20 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           >
             Clear cart
           </button>
-          <button
+          {/* <button
             type="submit"
             className="px-4 py-2 w-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded"
+          > */}
+          <Link
+            href={"/checkout"}
+            className="px-4 py-2 w-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded text-center"
+            onClick={() => {
+              setIsCartOpen(false);
+            }}
           >
-            <Link
-              href={"/checkout"}
-              onClick={() => {
-                setIsCartOpen(false);
-              }}
-            >
-              Checkout
-            </Link>
-          </button>
+            Checkout
+          </Link>
+          {/* </button> */}
         </div>
       </div>
     </div>

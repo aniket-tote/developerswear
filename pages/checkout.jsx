@@ -146,12 +146,15 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             return (
               <CartItem
                 key={k}
-                name={k}
-                desc={cart[k].name}
-                size={cart[k].size}
-                price={cart[k].price}
-                variant={cart[k].variant}
+                itemCode={k}
                 quantity={cart[k].qty}
+                price={cart[k].price}
+                title={cart[k].title}
+                size={cart[k].size}
+                color={cart[k].color}
+                category={cart[k].category}
+                desc={cart[k].desc}
+                img={cart[k].img}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
               />
@@ -179,7 +182,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           </div>
         </div>
         <Link href={"/order"}>
-          <button class="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+          <button className="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
             Confirm Order & Pay
           </button>
         </Link>
