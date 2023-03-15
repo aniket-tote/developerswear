@@ -8,7 +8,7 @@ const Tshirts = ({ tshirts }) => {
     <div className="p-3 lg:p-12 bg-slate-100">
       <div className="flex flex-wrap justify-between w-full">
         {Object.keys(tshirts).length == 0 && (
-          <p>No Tshirts in Stock. Will be comming soon. Stay Tuned!!</p>
+          <p>No Tshirts in Stock. Will be coming soon. Stay Tuned!!</p>
         )}
         {Object.keys(tshirts).map((item) => {
           return (
