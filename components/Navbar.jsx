@@ -4,10 +4,41 @@ import { BiCartAlt } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { MdAccountCircle } from "react-icons/md";
 import CartItem from "./CartItem";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
-  // console.log(cart, addToCart, removeFromCart, clearCart, subTotal);
+const Navbar = ({
+  user,
+  setUser,
+  setKey,
+  cart,
+  addToCart,
+  removeFromCart,
+  clearCart,
+  subTotal,
+}) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser({ value: null });
+    setKey(Math.random());
+    setDropdown(!dropdown);
+    router.push("/");
+    toast.success("See you soon!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   return (
     <div className="sticky top-0 bg-white z-10">
@@ -33,14 +64,49 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Stickers
             </Link>
           </nav>
-          <div className="btns">
-            <Link href={"/login"}>
-              <button className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded">
-                <MdAccountCircle className="text-2xl" />
-              </button>
-            </Link>
+          <div className="btns flex space-x-2 items-center">
+            {user.value ? (
+              <MdAccountCircle
+                onMouseEnter={(e) => {
+                  setDropdown(!dropdown);
+                }}
+                className="text-3xl cursor-pointer"
+              />
+            ) : (
+              <Link href={"/login"}>
+                <button className="py-1 px-3 bg-gray-100 hover:bg-gray-200 rounded">
+                  Login
+                </button>
+              </Link>
+            )}
+            {dropdown && (
+              <div
+                onMouseLeave={(e) => {
+                  setDropdown(!dropdown);
+                }}
+                className="dropdown absolute rounded border-2 w-48 right-20 top-12 bg-white shadow-lg"
+              >
+                <div className=" flex flex-col text-sm">
+                  <Link href={"/about"} className="py-2 px-4 hover:bg-gray-200">
+                    My account
+                  </Link>
+                  <Link
+                    href={"/orders"}
+                    className="py-2 px-4 hover:bg-gray-200"
+                  >
+                    Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-start"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
             <button
-              className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded"
+              className="inline-flex items-center border-0 py-1 px-3 focus:outline-none bg-gray-100 hover:bg-gray-200 rounded"
               onClick={() => {
                 setIsCartOpen(isCartOpen ? false : true);
               }}

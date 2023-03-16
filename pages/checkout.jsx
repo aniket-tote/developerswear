@@ -181,7 +181,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <span>${subTotal + 5 + 3}</span>
           </div>
         </div>
-        <Link href={"/order"}>
+        <Link href={"/orderDetail"}>
           <button className="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
             Confirm Order & Pay
           </button>

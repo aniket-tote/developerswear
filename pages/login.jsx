@@ -36,9 +36,10 @@ const Login = () => {
                     email: "",
                     password: "",
                   });
+                  localStorage.setItem("token", resData.token);
                   router.push("/");
 
-                  toast.success(`Welcome Back! ${resData.user.name}`, {
+                  toast.success(`Welcome Back! ${resData.name}`, {
                     position: "top-center",
                     autoClose: 2000,
                     hideProgressBar: true,

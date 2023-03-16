@@ -1,6 +1,6 @@
 import React from "react";
 
-const Order = () => {
+const OrderDetail = () => {
   return (
     <div>
       <section className="text-gray-600 body-font overflow-hidden">
@@ -57,4 +57,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default OrderDetail;
