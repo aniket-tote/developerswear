@@ -1,7 +1,12 @@
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
+  const [userData, setUserData] = useState({ email: "", password: "" });
+  const router = useRouter();
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center px-6 mx-auto md:h-screen py-12 lg:py-24">
@@ -10,7 +15,53 @@ const Login = () => {
             <h1 className="text-xl font-bold leading-tight w-full text-center tracking-tight text-gray-900 md:text-2xl ">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              action="#"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const res = await fetch("http://localhost:3000/api/login", {
+                  method: "POST", // or 'PUT'
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(userData),
+                });
+
+                const resData = await res.json();
+
+                if (resData.success) {
+                  setUserData({
+                    name: "",
+                    email: "",
+                    password: "",
+                  });
+                  router.push("/");
+
+                  toast.success(`Welcome Back! ${resData.user.name}`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                } else {
+                  toast.error(`${resData.message}`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                }
+              }}
+            >
               <div>
                 <label
                   htmlFor="email"
@@ -24,7 +75,13 @@ const Login = () => {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="name@company.com"
-                  required=""
+                  required
+                  value={userData.email}
+                  onChange={(e) => {
+                    setUserData((prevData) => {
+                      return { ...prevData, email: e.target.value };
+                    });
+                  }}
                 />
               </div>
               <div>
@@ -40,7 +97,14 @@ const Login = () => {
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                  required=""
+                  required
+                  autoComplete="on"
+                  value={userData.password}
+                  onChange={(e) => {
+                    setUserData((prevData) => {
+                      return { ...prevData, password: e.target.value };
+                    });
+                  }}
                 />
               </div>
               <div className="flex items-center justify-between">

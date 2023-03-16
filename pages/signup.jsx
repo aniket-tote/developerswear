@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -10,9 +11,10 @@ const Signup = () => {
     password: "",
   });
 
+  const router = useRouter();
+
   return (
     <section className="bg-gray-50">
-      <ToastContainer />
       <div className="flex flex-col items-center px-6 mx-auto md:h-screen py-12 lg:py-24">
         <div className="w-full bg-white rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -35,22 +37,37 @@ const Signup = () => {
 
                 const resData = await res.json();
 
-                console.log(resData);
-                setUserData({
-                  name: "",
-                  email: "",
-                  password: "",
-                });
-                toast.success("Welcome to the club!", {
-                  position: "top-center",
-                  autoClose: 2000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
+                if (resData.success) {
+                  setUserData({
+                    name: "",
+                    email: "",
+                    password: "",
+                  });
+
+                  router.push("/");
+
+                  toast.success(`Welcome to the club! ${resData.u.name}`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                } else {
+                  toast.error(`${resData.message}`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                }
               }}
             >
               <div>
@@ -111,6 +128,7 @@ const Signup = () => {
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   required
+                  autoComplete="on"
                   value={userData.password}
                   onChange={(e) => {
                     setUserData((preValues) => {
@@ -127,7 +145,7 @@ const Signup = () => {
                 Register
               </button>
               <p className="text-sm font-light text-gray-500 ">
-                Already have an account yet?{" "}
+                Already have an account?{" "}
                 <Link
                   href={"/login"}
                   className="font-medium text-primary-600 hover:underline "

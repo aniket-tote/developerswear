@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
+import Image from "next/image";
 
 const Tshirts = ({ tshirts }) => {
   return (
@@ -18,9 +19,11 @@ const Tshirts = ({ tshirts }) => {
               className="lg:w-[23.5%] md:w-1/2 m-2 bg-white p-4 w-full shadow hover:shadow-lg rounded"
             >
               <div className="w-full h-64 flex justify-center">
-                <img
+                <Image
                   alt="ecommerce"
-                  className="h-full rounded"
+                  className="rounded"
+                  height={"100"}
+                  width={"500"}
                   src={tshirts[item].img}
                 />
               </div>
