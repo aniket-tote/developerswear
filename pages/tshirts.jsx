@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
-import Image from "next/image";
 
 const Tshirts = ({ tshirts }) => {
   return (
@@ -19,11 +19,9 @@ const Tshirts = ({ tshirts }) => {
               className="lg:w-[23.5%] md:w-1/2 m-2 bg-white p-4 w-full shadow hover:shadow-lg rounded"
             >
               <div className="w-full h-64 flex justify-center">
-                <Image
+                <img
                   alt="ecommerce"
-                  className="rounded"
-                  height={"100"}
-                  width={"500"}
+                  className="h-full rounded"
                   src={tshirts[item].img}
                 />
               </div>
@@ -48,13 +46,13 @@ const Tshirts = ({ tshirts }) => {
                     return (
                       <button
                         key={e}
-                        className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none ${
-                          e === "white" || e === "black"
-                            ? "bg-" + e
-                            : "bg-" + e + "-700"
-                        } ${e === "maroon" ? "bg-red-700" : ""} ${
-                          e === "grey" ? "bg-gray-400" : ""
-                        } ${e === "navy" ? "bg-blue-900" : ""}`}
+                        className={`border border-gray-500 rounded-full w-6 h-6  focus:outline-none 
+                        ${e === "white" ? "bg-white" : ""}
+                        ${e === "black" ? "bg-black" : ""} 
+                        ${e === "maroon" ? "bg-red-700" : ""} 
+                        ${e === "green" ? "bg-green-700" : ""} 
+                        ${e === "grey" ? "bg-gray-400" : ""} 
+                        ${e === "navy" ? "bg-blue-900" : ""}`}
                       ></button>
                     );
                   })}

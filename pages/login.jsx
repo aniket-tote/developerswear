@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
+
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center px-6 mx-auto md:h-screen py-12 lg:py-24">
@@ -21,7 +28,7 @@ const Login = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
                 const res = await fetch("http://localhost:3000/api/login", {
-                  method: "POST", // or 'PUT'
+                  method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },

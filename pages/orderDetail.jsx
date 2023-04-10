@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const OrderDetail = () => {
+  const router = useRouter();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
   return (
     <div>
       <section className="text-gray-600 body-font overflow-hidden">
@@ -16,26 +23,44 @@ const OrderDetail = () => {
               <p className="leading-relaxed mb-4">
                 Order has been placed successfully.
               </p>
-              <div className="flex mb-4 justify-between border-b-2 border-gray-300">
-                <a className=" py-2 text-lg px-1">Description</a>
-                <a className="py-2 text-lg px-1">Quantity</a>
-                <a className="py-2 text-lg px-1">Item Total</a>
-              </div>
-              <div className="flex pb-2 justify-between">
-                <span className="text-gray-500">Tshirt</span>
-                <span className="text-gray-900">1</span>
-                <span className="text-gray-900">499</span>
-              </div>
-              <div className="flex border-t border-gray-200 justify-between py-2">
-                <span className="text-gray-500">Hoodies</span>
-                <span className="text-gray-900">1</span>
-                <span className="text-gray-900">499</span>
-              </div>
-              <div className="flex border-t border-b mb-6 border-gray-200 justify-between py-2">
-                <span className="text-gray-500">Quantity</span>
-                <span className="text-gray-900">4</span>
-                <span className="text-gray-900">4</span>
-              </div>
+              <table className="w-full text-left mb-6">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="p-3 title-font tracking-wider font-medium border-gray-300 border-y text-gray-900 text-sm rounded-tl rounded-bl">
+                      Description
+                    </th>
+                    <th className="p-3 title-font tracking-wider font-medium border-gray-300 border-y text-gray-900 text-sm">
+                      Quantity
+                    </th>
+                    <th className="p-3 title-font tracking-wider font-medium border-gray-300 border-y text-gray-900 text-sm">
+                      Item Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="hover:bg-gray-100">
+                    <td className="p-3 border-gray-200 border-y w-1/3">
+                      Tshirt
+                    </td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
+                  </tr>
+                  <tr className="hover:bg-gray-100">
+                    <td className="p-3 border-gray-200 border-y w-1/3">
+                      Tshirt
+                    </td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
+                  </tr>
+                  <tr className="hover:bg-gray-100">
+                    <td className="p-3 border-gray-200 border-y w-1/3">
+                      Tshirt
+                    </td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
+                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
+                  </tr>
+                </tbody>
+              </table>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">
                   Subtotal: Rs. 58.00

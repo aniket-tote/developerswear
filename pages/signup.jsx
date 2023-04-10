@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +12,12 @@ const Signup = () => {
   });
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
 
   return (
     <section className="bg-gray-50">
@@ -161,10 +167,5 @@ const Signup = () => {
   );
 };
 
-export async function getServerSideProps(context) {
-  return {
-    props: { message: "he" },
-  };
-}
 
 export default Signup;

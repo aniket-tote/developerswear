@@ -1,7 +1,14 @@
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 const Forgotpass = () => {
+  const router = useRouter();
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center px-6 mx-auto md:h-screen py-12 lg:py-24">

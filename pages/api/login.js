@@ -1,9 +1,11 @@
 import User from "../../models/User";
 import connectDb from "../../middleware/mongoose";
+import { useEffect } from "react";
 var CryptoJS = require("crypto-js");
 var jwt = require("jsonwebtoken");
 
 const handler = async (req, res) => {
+
   if (req.method == "POST") {
     try {
       let user = await User.findOne({ email: req.body.email });

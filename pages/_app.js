@@ -5,16 +5,25 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingBar from "react-top-loading-bar";
 
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
   const [user, setUser] = useState({ value: null });
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState();
+  const [progress, setProgress] = useState(0);
 
   const router = useRouter();
 
   useEffect(() => {
+    router.events.on("routeChangeStart", () => {
+      setProgress(40);
+    });
+    router.events.on("routeChangeComplete", () => {
+      setProgress(100);
+    });
+
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")));
@@ -24,6 +33,7 @@ export default function App({ Component, pageProps }) {
       console.log(error);
       localStorage.clear();
     }
+
     const token = localStorage.getItem("token");
     if (token) {
       setUser({ value: token });
@@ -148,21 +158,32 @@ export default function App({ Component, pageProps }) {
 
   return (
     <div>
-      <Navbar
-        key={key}
-        setKey={setKey}
-        setUser={setUser}
-        user={user}
-        cart={cart}
-        addToCart={addToCart}
-        removeFromCart={removeFromCart}
-        clearCart={clearCart}
-        subTotal={subTotal}
-        buyNow={buyNow}
+      <LoadingBar
+        color="rgb(99 102 241)"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
       />
       <ToastContainer />
+      {
+        <Navbar
+          key={key}
+          progress={progress}
+          setProgress={setProgress}
+          setKey={setKey}
+          setUser={setUser}
+          user={user}
+          cart={cart}
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+          clearCart={clearCart}
+          subTotal={subTotal}
+          buyNow={buyNow}
+        />
+      }
       <Component
         cart={cart}
+        progress={progress}
+        setProgress={setProgress}
         setKey={setKey}
         user={user}
         addToCart={addToCart}

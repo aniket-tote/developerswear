@@ -1,10 +1,60 @@
 import CartItem from "@/components/CartItem";
-import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import Script from "next/script";
 import React from "react";
 
 const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+  const router = useRouter();
+
+  const initiatePayment = async () => {
+    const response = await fetch("http://localhost:3000/api/createorder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ subTotal }),
+    });
+    const { order } = await response.json();
+    console.log(order.id);
+    const options = {
+      key: "rzp_test_jARP83mcReHUUL",
+      amount: subTotal * 100,
+      currency: "INR",
+      name: "Example Corp.",
+      description: "Test payment",
+      handler: function (response) {
+        console.log(response);
+        router.push("/orderDetail");
+      },
+      prefill: {
+        name: "John Doe",
+        email: "john@example.com",
+        contact: "9999999999",
+      },
+      notes: {
+        address: "Example address",
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+    const loadRazorpay = () => {
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    };
+
+    if (window.Razorpay) {
+      loadRazorpay();
+    } else {
+      window.addEventListener("load", loadRazorpay);
+    }
+  };
+
   return (
     <section className="text-gray-600 body-font relative flex flex-col lg:flex-row w-full space-y-2 lg:space-y-0 lg:space-x-2 p-3 lg:p-14">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
+
       <div className="container p-5 w-full lg:w-2/3">
         <div className="text-center w-full">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
@@ -181,11 +231,16 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <span>${subTotal + 5 + 3}</span>
           </div>
         </div>
-        <Link href={"/orderDetail"}>
-          <button className="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-            Confirm Order & Pay
-          </button>
-        </Link>
+        {/* <Link href={"/orderDetail"}> */}
+        <button
+          className="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+          onClick={() => {
+            initiatePayment();
+          }}
+        >
+          Confirm Order & Pay
+        </button>
+        {/* </Link> */}
       </div>
     </section>
   );
