@@ -1,8 +1,8 @@
 import Razorpay from "razorpay";
 
 var instance = new Razorpay({
-  key_id: "rzp_test_jARP83mcReHUUL",
-  key_secret: "8JQqv98vxj8klWDCuLsV7KTz",
+  key_id: process.env.RAZORPAY_KEY,
+  key_secret: process.env.RAZORPAY_SECRET,
 });
 
 export default async function handler(req, res) {

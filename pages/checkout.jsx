@@ -18,11 +18,12 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
     const { order } = await response.json();
     console.log(order.id);
     const options = {
-      key: "rzp_test_jARP83mcReHUUL",
+      key: process.env.RAZORPAY_KEY,
       amount: subTotal * 100,
       currency: "INR",
       name: "Example Corp.",
       description: "Test payment",
+      order_id: order.id,
       handler: function (response) {
         console.log(response);
         router.push("/orderDetail");
