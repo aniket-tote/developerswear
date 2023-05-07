@@ -21,8 +21,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       key: process.env.RAZORPAY_KEY,
       amount: subTotal * 100,
       currency: "INR",
-      name: "Example Corp.",
-      description: "Test payment",
+      name: "DevelopersWear.",
+      description: "Order payment",
       order_id: order.id,
       handler: function (response) {
         console.log(response);

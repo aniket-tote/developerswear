@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   if (req.method == "POST") {
     try {
       var options = {
-        amount: req.body.subTotal, // amount in the smallest currency unit
+        amount: req.body.subTotal * 100,
         currency: "INR",
       };
       const response = await instance.orders.create(options);
