@@ -11,7 +11,7 @@ const handler = async (req, res) => {
         .json({ success: false, message: "Email already registered" });
     } else {
       try {
-        const { name, email } = req.body;
+        const { name, email, gender, phone } = req.body;
 
         let u = new User({
           name,
@@ -20,6 +20,8 @@ const handler = async (req, res) => {
             req.body.password,
             "mySecretKey"
           ).toString(),
+          gender,
+          phone,
         });
         await u.save();
         res.status(200).json({ success: true, u });

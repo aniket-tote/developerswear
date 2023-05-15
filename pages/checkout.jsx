@@ -5,7 +5,6 @@ import Script from "next/script";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import jwt from "jsonwebtoken";
 
 const Checkout = ({
   cart,
@@ -77,12 +76,13 @@ const Checkout = ({
   async function fetchPincodeData(pincode) {
     const url =
       "https://get-details-by-pin-code-india.p.rapidapi.com/detailsbypincode";
+    console.log();
     const options = {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "X-RapidAPI-Key": "b5caba6ae0msh040548c73f83a04p1761d2jsn224d3a72ec27",
-        "X-RapidAPI-Host": "get-details-by-pin-code-india.p.rapidapi.com",
+        "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
+        "X-RapidAPI-Host": process.env.NEXT_PUBLIC_RAPID_API_HOST,
       },
       body: JSON.stringify({ pincode }),
     };
@@ -280,7 +280,7 @@ const Checkout = ({
                   name="email"
                   value={userData.email}
                   readOnly={true}
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-gray-100 hover:cursor-not-allowed bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>
@@ -362,7 +362,7 @@ const Checkout = ({
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-gray-100 hover:cursor-not-allowed bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>
@@ -383,7 +383,7 @@ const Checkout = ({
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-gray-100 hover:cursor-not-allowed bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>
@@ -404,7 +404,7 @@ const Checkout = ({
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-gray-100 hover:cursor-not-allowed bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>
@@ -426,7 +426,7 @@ const Checkout = ({
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-gray-100 hover:cursor-not-allowed bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
             </div>

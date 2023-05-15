@@ -9,7 +9,6 @@ var instance = new Razorpay({
 });
 
 const handler = async (req, res) => {
-  //   res.redirect("/orderDetail");
   if (req.method == "POST") {
     try {
       const paymentinfo = await instance.payments.fetch(

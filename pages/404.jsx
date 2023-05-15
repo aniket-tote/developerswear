@@ -4,7 +4,7 @@ export default function Custom404() {
       <img
         src="https://www.memesmonkey.com/images/memesmonkey/c5/c56088633b6401d3c67fd73c66c3fbac.jpeg"
         alt=""
-        srcset=""
+        srcSet=""
       />
     </div>
   );
