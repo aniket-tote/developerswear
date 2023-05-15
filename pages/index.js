@@ -26,7 +26,7 @@ export default function Home() {
                 Short Catchy Line here
               </h2>
               <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">
-                DevelopersWear - Wear the code
+                DevelopersWear - Look like developer
               </h1>
             </div>
             <div className="flex flex-wrap -m-4">

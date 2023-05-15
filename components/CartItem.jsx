@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { MdOutlineDeleteOutline } from "react-icons/md";
@@ -6,9 +7,12 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 const CartItem = (props) => {
   return (
     <div className="p-2 flex items-center shadow-md bg-white my-2">
-      <div className="img w-36 h-36 aspect-square flex justify-between items-center">
+      <Link
+        href={`/product/${props.itemCode}`}
+        className="img w-36 h-36 aspect-square flex justify-between items-center"
+      >
         <img className="h-full rounded" src={props.img} />
-      </div>
+      </Link>
       <div className="right p-2 flex flex-col space-y-2">
         <div className="name&desc flex flex-col">
           <span className="name text-md">{props.title}</span>

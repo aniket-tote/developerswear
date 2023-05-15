@@ -23,7 +23,7 @@ const Navbar = ({
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
     setUser({ value: null });
     setKey(Math.random());
     setDropdown(!dropdown);
@@ -43,28 +43,14 @@ const Navbar = ({
   return (
     <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font shadow-md">
-        <div className="container flex flex-wrap p-4 flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 ">
+        <div className="container flex p-4 flex-wrap items-center justify-between">
           <Link
-            className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+            className="flex title-font font-medium items-center text-gray-900"
             href={"/"}
           >
             <span className="ml-3 text-xl cursor-pointer">DevelopersWear</span>
           </Link>
-          <nav className="flex flex-wrap space-x-7 md:space-x-14 items-center text-base justify-center">
-            <Link href={"/tshirts"} className=" hover:text-gray-900">
-              T-shirts
-            </Link>
-            <Link href={"/hoodies"} className=" hover:text-gray-900">
-              Hoodies
-            </Link>
-            <Link href={"/mugs"} className=" hover:text-gray-900">
-              Mugs
-            </Link>
-            <Link href={"/stickers"} className=" hover:text-gray-900">
-              Stickers
-            </Link>
-          </nav>
-          <div className="btns flex space-x-2 items-center">
+          <div className="md:order-2 justify-self-end btns flex space-x-2 items-center">
             {user.value ? (
               <MdAccountCircle
                 onMouseEnter={(e) => {
@@ -94,7 +80,7 @@ const Navbar = ({
                     href={"/orders"}
                     className="py-2 px-4 hover:bg-gray-200"
                   >
-                    Orders
+                    My Orders
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -114,6 +100,20 @@ const Navbar = ({
               <BiCartAlt className="text-2xl " />
             </button>
           </div>
+          <nav className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-wrap space-x-7 md:space-x-12 lg:space-x-14 items-center text-base justify-center">
+            <Link href={"/tshirts"} className=" hover:text-gray-900">
+              T-shirts
+            </Link>
+            <Link href={"/hoodies"} className=" hover:text-gray-900">
+              Hoodies
+            </Link>
+            <Link href={"/mugs"} className=" hover:text-gray-900">
+              Mugs
+            </Link>
+            <Link href={"/stickers"} className=" hover:text-gray-900">
+              Stickers
+            </Link>
+          </nav>
         </div>
       </header>
 

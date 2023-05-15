@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import mongoose from "mongoose";
+import Order from "@/models/Order";
 
-const OrderDetail = () => {
-  const router = useRouter();
+const OrderDetail = ({ order }) => {
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!localStorage.getItem("userToken")) {
       router.push("/");
     }
   }, []);
@@ -13,12 +13,12 @@ const OrderDetail = () => {
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-12 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+            <div className="lg:w-2/3 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 DevelopersWear
               </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
-                Order Id: #6969
+                Order Id: #{order.orderId}
               </h1>
               <p className="leading-relaxed mb-4">
                 Order has been placed successfully.
@@ -38,48 +38,72 @@ const OrderDetail = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="hover:bg-gray-100">
-                    <td className="p-3 border-gray-200 border-y w-1/3">
-                      Tshirt
-                    </td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
-                  </tr>
-                  <tr className="hover:bg-gray-100">
-                    <td className="p-3 border-gray-200 border-y w-1/3">
-                      Tshirt
-                    </td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
-                  </tr>
-                  <tr className="hover:bg-gray-100">
-                    <td className="p-3 border-gray-200 border-y w-1/3">
-                      Tshirt
-                    </td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">1</td>
-                    <td className="p-3 border-gray-200 border-y w-1/3">599</td>
-                  </tr>
+                  {Object.keys(order.products).map((key) => {
+                    return (
+                      <tr key={key} className="hover:bg-gray-100">
+                        <td className="p-3 border-gray-200 border-y w-1/3">
+                          <div className="name&desc flex flex-col">
+                            <span className="name text-md">
+                              {order.products[key].title}
+                            </span>
+                            <span className="description text-gray-400">
+                              {order.products[key].category +
+                                " (" +
+                                order.products[key].color +
+                                " / " +
+                                order.products[key].size +
+                                ")"}
+                            </span>
+                          </div>
+                          <div className="price">
+                            ₹{order.products[key].price}
+                          </div>
+                        </td>
+                        <td className="p-3 border-gray-200 border-y w-1/3">
+                          {order.products[key].qty}
+                        </td>
+                        <td className="p-3 border-gray-200 border-y w-1/3">
+                          {order.products[key].price * order.products[key].qty}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">
-                  Subtotal: Rs. 58.00
+                  Subtotal: Rs. {order.amount}
                 </span>
                 <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
                   Track Order
                 </button>
               </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-semibold">Contact Details</span>
+                <span>{order.name}</span>
+                <span>{order.email}</span>
+                <span>{order.address}</span>
+                <span>
+                  {order.pincode},{order.city},{order.state}
+                </span>
+              </div>
             </div>
-            <img
-              alt="ecommerce"
-              className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src="https://dummyimage.com/400x400"
-            />
+            <div className="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded bg-gray-500" />
           </div>
         </div>
       </section>
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.URL);
+  }
+  let order = await Order.findOne({ orderId: context.query.id });
+  return {
+    props: { order: JSON.parse(JSON.stringify(order)) },
+  };
+}
 
 export default OrderDetail;

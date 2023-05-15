@@ -9,7 +9,7 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("userToken")) {
       router.push("/");
     }
   }, []);
@@ -43,7 +43,14 @@ const Login = () => {
                     email: "",
                     password: "",
                   });
-                  localStorage.setItem("token", resData.token);
+                  localStorage.setItem(
+                    "userToken",
+                    JSON.stringify({
+                      token: resData.token,
+                      name: resData.name,
+                      email: resData.email,
+                    })
+                  );
                   router.push("/");
 
                   toast.success(`Welcome Back! ${resData.name}`, {

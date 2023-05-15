@@ -5,7 +5,6 @@ var CryptoJS = require("crypto-js");
 var jwt = require("jsonwebtoken");
 
 const handler = async (req, res) => {
-
   if (req.method == "POST") {
     try {
       let user = await User.findOne({ email: req.body.email });
@@ -14,8 +13,10 @@ const handler = async (req, res) => {
         "mySecretKey"
       ).toString(CryptoJS.enc.Utf8);
       if (user != null && req.body.password === userPass) {
-        var token = jwt.sign({ user }, "jwtsecret");
-        res.status(200).json({ success: true, name: user.name, token });
+        var token = jwt.sign({ user }, process.env.JWT_SECRET);
+        res
+          .status(200)
+          .json({ success: true, name: user.name, email: user.email, token });
       } else {
         res
           .status(400)

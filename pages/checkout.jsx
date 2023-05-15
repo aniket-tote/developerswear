@@ -1,11 +1,165 @@
 import CartItem from "@/components/CartItem";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter, Router } from "next/router";
 import Script from "next/script";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import jwt from "jsonwebtoken";
 
-const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+const Checkout = ({
+  cart,
+  addToCart,
+  removeFromCart,
+  clearCart,
+  subTotal,
+  user,
+}) => {
   const router = useRouter();
+
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    address: "",
+    phone: "",
+    pincode: "",
+    postOfficeName: "",
+    city: "",
+    district: "",
+    state: "",
+  });
+
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (!localStorage.getItem("userToken")) {
+      toast.warning(`You need to login first.`, {
+        position: "top-center",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      router.push("/");
+      return;
+    }
+    setUserData((prev) => {
+      return {
+        ...prev,
+        name: user.value.name,
+        email: user.value.email,
+      };
+    });
+  }, []);
+
+  const handleInputChange = (e) => {
+    setUserData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const handlePincodeChange = async (e) => {
+    setUserData((prev) => {
+      return {
+        ...prev,
+        pincode: e.target.value,
+      };
+    });
+    if (e.target.value.trim().length === 6) {
+      fetchPincodeData(e.target.value);
+    }
+  };
+
+  async function fetchPincodeData(pincode) {
+    const url =
+      "https://get-details-by-pin-code-india.p.rapidapi.com/detailsbypincode";
+    const options = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "b5caba6ae0msh040548c73f83a04p1761d2jsn224d3a72ec27",
+        "X-RapidAPI-Host": "get-details-by-pin-code-india.p.rapidapi.com",
+      },
+      body: JSON.stringify({ pincode }),
+    };
+    try {
+      const response = await fetch(url, options);
+      const { details } = await response.json();
+      if (!details) {
+        toast.warning(`Incorrect pin`, {
+          position: "top-center",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+        return;
+      }
+      setUserData((prev) => {
+        return {
+          ...prev,
+          postOfficeName: details[0].postoffice_name,
+          city: details[0].city_name,
+          district: details[0].district_name,
+          state: details[0].state_name,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if (
+      userData.name.trim() === "" ||
+      userData.address.trim() === "" ||
+      userData.pincode.trim() === "" ||
+      userData.phone.trim() === "" ||
+      userData.city.trim() === "" ||
+      userData.state.trim() === ""
+    ) {
+      setDisabled(true);
+      return;
+    }
+    setDisabled(false);
+  }, [userData]);
+
+  const handleSubmit = async () => {
+    if (
+      userData.name.trim() === "" ||
+      userData.email.trim() === "" ||
+      userData.address.trim() === "" ||
+      userData.pincode.trim() === "" ||
+      userData.phone.trim() === ""
+    ) {
+      toast.warning(`Input feilds mustn't be empty`, {
+        position: "top-center",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      return;
+    }
+    if (Object.keys(cart).length === 0) {
+      toast.warning(`cart is empty`, {
+        position: "top-center",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      return;
+    }
+    initiatePayment();
+  };
 
   const initiatePayment = async () => {
     const response = await fetch("http://localhost:3000/api/createorder", {
@@ -13,20 +167,46 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ subTotal }),
+      body: JSON.stringify({ subTotal, userData, cart }),
     });
-    const { order } = await response.json();
-    console.log(order.id);
+
+    const orderRes = await response.json();
+
+    if (!orderRes.success) {
+      toast.warning(orderRes.message, {
+        position: "top-center",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      return;
+    }
+    const order = orderRes.order;
+
     const options = {
       key: process.env.RAZORPAY_KEY,
-      amount: subTotal * 100,
-      currency: "INR",
+      amount: order.amount,
+      currency: order.currency,
       name: "DevelopersWear.",
       description: "Order payment",
       order_id: order.id,
-      handler: function (response) {
-        console.log(response);
-        router.push("/orderDetail");
+      handler: async function (response) {
+        const transRes = await fetch(
+          "http://localhost:3000/api/posttransaction",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ orderId: order.id, response }),
+          }
+        );
+        const orderDetail = await transRes.json();
+
+        clearCart();
+        router.push(`/orderDetail?id=${orderDetail.order.orderId}`);
       },
       prefill: {
         name: "John Doe",
@@ -40,6 +220,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         color: "#F37254",
       },
     };
+
     const loadRazorpay = () => {
       const rzp = new window.Razorpay(options);
       rzp.open();
@@ -77,6 +258,10 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                   type="text"
                   id="name"
                   name="name"
+                  value={userData.name}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -93,6 +278,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                   type="email"
                   id="email"
                   name="email"
+                  value={userData.email}
+                  readOnly={true}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -100,14 +287,18 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <div className="p-2 w-full">
               <div className="relative">
                 <label
-                  htmlFor="message"
+                  htmlFor="address"
                   className="leading-7 text-sm text-gray-600"
                 >
                   Address
                 </label>
                 <textarea
-                  id="message"
-                  name="message"
+                  id="address"
+                  name="address"
+                  value={userData.address}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                 ></textarea>
               </div>
@@ -115,15 +306,20 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <div className="p-2 w-1/2">
               <div className="relative">
                 <label
-                  htmlFor="name"
+                  htmlFor="phone"
                   className="leading-7 text-sm text-gray-600"
                 >
                   Phone
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="phone"
+                  name="phone"
+                  value={userData.phone}
+                  maxLength={10}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -131,15 +327,20 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <div className="p-2 w-1/2">
               <div className="relative">
                 <label
-                  htmlFor="email"
+                  htmlFor="pincode"
                   className="leading-7 text-sm text-gray-600"
                 >
                   Pincode
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
+                  type="text"
+                  id="pincode"
+                  name="pincode"
+                  value={userData.pincode}
+                  maxLength={6}
+                  onChange={(e) => {
+                    handlePincodeChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -147,15 +348,41 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <div className="p-2 w-1/2">
               <div className="relative">
                 <label
-                  htmlFor="name"
+                  htmlFor="postOfficeName"
+                  className="leading-7 text-sm text-gray-600"
+                >
+                  P/O name
+                </label>
+                <input
+                  type="text"
+                  id="postOfficeName"
+                  name="postOfficeName"
+                  value={userData.postOfficeName}
+                  readOnly={true}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                />
+              </div>
+            </div>
+            <div className="p-2 w-1/2">
+              <div className="relative">
+                <label
+                  htmlFor="city"
                   className="leading-7 text-sm text-gray-600"
                 >
                   City
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="city"
+                  name="city"
+                  value={userData.city}
+                  readOnly={true}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -163,15 +390,42 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <div className="p-2 w-1/2">
               <div className="relative">
                 <label
-                  htmlFor="email"
+                  htmlFor="district"
+                  className="leading-7 text-sm text-gray-600"
+                >
+                  District
+                </label>
+                <input
+                  type="test"
+                  id="district"
+                  name="district"
+                  value={userData.district}
+                  readOnly={true}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                />
+              </div>
+            </div>
+
+            <div className="p-2 w-1/2">
+              <div className="relative">
+                <label
+                  htmlFor="state"
                   className="leading-7 text-sm text-gray-600"
                 >
                   State
                 </label>
                 <input
                   type="email"
-                  id="email"
-                  name="email"
+                  id="state"
+                  name="state"
+                  value={userData.state}
+                  readOnly={true}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
@@ -232,16 +486,15 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <span>${subTotal + 5 + 3}</span>
           </div>
         </div>
-        {/* <Link href={"/orderDetail"}> */}
         <button
-          className="text-white w-full bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+          className="text-white w-full bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300 rounded text-lg"
+          disabled={disabled}
           onClick={() => {
-            initiatePayment();
+            handleSubmit();
           }}
         >
           Confirm Order & Pay
         </button>
-        {/* </Link> */}
       </div>
     </section>
   );

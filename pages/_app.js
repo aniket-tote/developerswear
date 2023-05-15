@@ -34,11 +34,11 @@ export default function App({ Component, pageProps }) {
       localStorage.clear();
     }
 
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ value: token });
-      setKey(Math.random());
+    const userToken = JSON.parse(localStorage.getItem("userToken"));
+    if (userToken) {
+      setUser({ value: userToken });
     }
+    setKey(Math.random());
   }, [router.query]);
 
   const saveCart = (myCart) => {
@@ -164,7 +164,7 @@ export default function App({ Component, pageProps }) {
         onLoaderFinished={() => setProgress(0)}
       />
       <ToastContainer />
-      {
+      {key && (
         <Navbar
           key={key}
           progress={progress}
@@ -179,7 +179,7 @@ export default function App({ Component, pageProps }) {
           subTotal={subTotal}
           buyNow={buyNow}
         />
-      }
+      )}
       <Component
         cart={cart}
         progress={progress}

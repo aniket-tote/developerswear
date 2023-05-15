@@ -1,10 +1,13 @@
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
-// import axios from "axios";
+import Error from "next/error";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import Custom404 from "../404";
 
-const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
+const Slug = ({ addToCart, tshirt, varients, buyNow, error }) => {
   const pincodeInput = useRef();
   const [availabilityMessage, setAvailabilityMessage] = useState("");
 
@@ -24,6 +27,11 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
     let url = `http://localhost:3000/product/${varients[color][size]["slug"]}`;
     window.location = url;
   };
+
+  if (error === 404) {
+    // return <Error statusCode={error} />;
+    return <Custom404 />;
+  }
 
   return (
     <>
@@ -45,61 +53,11 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
                 </h1>
                 <div className="flex mb-2">
                   <span className="flex items-center">
-                    <svg
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-indigo-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-indigo-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-indigo-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-indigo-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-indigo-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
+                    <AiFillStar className="text-indigo-600" />
+                    <AiFillStar className="text-indigo-600" />
+                    <AiFillStar className="text-indigo-600" />
+                    <AiFillStar className="text-indigo-600" />
+                    <AiOutlineStar className="text-indigo-600" />
                     <span className="text-gray-600 ml-3">4 Reviews</span>
                   </span>
                 </div>
@@ -173,7 +131,12 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                {tshirt.data.availableQty === 0 && (
+                  <div className="text-red-400 font-semibold text-lg">
+                    Currently Out of stock
+                  </div>
+                )}
+                <div className="flex justify-between items-center">
                   <span className="title-font font-medium text-2xl text-gray-900">
                     Price: ₹{tshirt.data.price}
                   </span>
@@ -192,7 +155,8 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
                           tshirt.data.desc
                         );
                       }}
-                      className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                      disabled={tshirt.data.availableQty === 0}
+                      className="flex text-white disabled:bg-indigo-300 disabled:cursor-not-allowed bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                     >
                       Buy now
                     </button>
@@ -210,21 +174,13 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
                           tshirt.data.desc
                         );
                       }}
-                      className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                      disabled={tshirt.data.availableQty === 0}
+                      className="flex text-white disabled:bg-indigo-300 disabled:cursor-not-allowed bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                     >
                       Add to cart
                     </button>
                     <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500">
-                      <svg
-                        fill="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                      </svg>
+                      <MdFavoriteBorder className="text-2xl" />
                     </button>
                   </div>
                 </div>
@@ -250,6 +206,7 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
                     </div>
                     <button
                       onClick={checkAvailability}
+                      disabled={tshirt.data.availableQty === 0}
                       className="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                     >
                       Check
@@ -269,11 +226,20 @@ const Slug = ({ addToCart, tshirt, varients, buyNow }) => {
 };
 
 export async function getServerSideProps(context) {
+  let error = null;
   if (!mongoose.connections[0].readyState) {
     await mongoose.connect(process.env.URL);
   }
 
   let product = await Product.findOne({ slug: context.params.slug });
+
+  if (!product) {
+    return {
+      props: {
+        error: 404,
+      },
+    };
+  }
 
   let varients = await Product.find({ title: product.title });
 
@@ -290,6 +256,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      error: error,
       tshirt: JSON.parse(JSON.stringify({ data: product })),
       varients: JSON.parse(JSON.stringify(colorSizeSlug)),
     },

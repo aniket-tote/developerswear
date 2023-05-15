@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 const Forgotpass = () => {
   const router = useRouter();
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("userToken")) {
       router.push("/");
     }
   }, []);

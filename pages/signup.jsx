@@ -14,7 +14,7 @@ const Signup = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("userToken")) {
       router.push("/");
     }
   }, []);
@@ -50,7 +50,7 @@ const Signup = () => {
                     password: "",
                   });
 
-                  router.push("/");
+                  router.push("/login");
 
                   toast.success(`Welcome to the club! ${resData.u.name}`, {
                     position: "top-center",
@@ -166,6 +166,5 @@ const Signup = () => {
     </section>
   );
 };
-
 
 export default Signup;
