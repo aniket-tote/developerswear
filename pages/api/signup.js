@@ -12,7 +12,6 @@ const handler = async (req, res) => {
     } else {
       try {
         const { name, email, gender, phone } = req.body;
-
         let u = new User({
           name,
           email,

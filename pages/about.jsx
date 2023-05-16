@@ -205,25 +205,91 @@ const About = () => {
               </span>
             </label>
           </div>
-          <button
-            className={`px-4 py-2 bg-indigo-500 rounded w-max h-max text-white ml-auto self-end mb-2 ${
-              editBasicEnable ? "visible" : "hidden"
-            }`}
-            type="submit"
-            onClick={() => {
-              setEditBasicEnable(false);
-            }}
-          >
-            Submit
-          </button>
+          <div className="ml-auto self-end mb-2 mr-2 space-x-2">
+            <button
+              className={`px-4 py-2 hover:text-red-500 ease-in-out rounded w-max h-max ${
+                editBasicEnable ? "visible" : "hidden"
+              }`}
+              type="button"
+              onClick={(e) => {
+                fetchUserData();
+                setEditBasicEnable(false);
+              }}
+            >
+              cancel
+            </button>
+            <button
+              className={`px-4 py-2 bg-indigo-500 rounded w-max h-max text-white ${
+                editBasicEnable ? "visible" : "hidden"
+              }`}
+              type="submit"
+              onClick={() => {
+                setEditBasicEnable(false);
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </form>
 
         <div className="p-2 w-full mt-8 border-t border-gray-200 text-center"></div>
+
         <div className="text-xl font-bold mb-4 text-center md:text-left">
           Change Password
         </div>
-        <div className="flex flex-wrap -m-2">
-          <div className="p-2 w-1/2">
+        <form
+          className="flex flex-wrap -m-2"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (e.target.password.value !== e.target.cpassword.value) {
+              toast.warning("Passwords do not match", {
+                position: "top-center",
+                autoClose: 2000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+              });
+            } else {
+              const response = await fetch(
+                "http://localhost:3000/api/passwordUpdate",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    email: JSON.parse(localStorage.getItem("userToken")).email,
+                    password: e.target.password.value.trim(),
+                  }),
+                }
+              );
+              const resData = await response.json();
+
+              if (resData.success) {
+                toast.success(`Password updated.`, {
+                  position: "top-center",
+                  autoClose: 2000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: "light",
+                });
+                fetchUserData();
+              } else {
+                toast.error(resData.message, {
+                  position: "top-center",
+                  autoClose: 2000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: "light",
+                });
+              }
+            }
+          }}
+        >
+          <div className="p-2 w-5/12">
             <div className="relative">
               <label
                 htmlFor="password"
@@ -247,7 +313,7 @@ const About = () => {
               />
             </div>
           </div>
-          <div className="p-2 w-1/2">
+          <div className="p-2 w-5/12">
             <div className="relative">
               <label
                 htmlFor="cpassword"
@@ -260,7 +326,7 @@ const About = () => {
                 name="cpassword"
                 id="cpassword"
                 placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 required
                 autoComplete="on"
                 // value={userData.phone}
@@ -271,7 +337,15 @@ const About = () => {
               />
             </div>
           </div>
-        </div>
+          <div className="p-2 w-2/12 flex justify-end items-end">
+            <button
+              type="submit"
+              className={`px-4 py-2 bg-indigo-500 rounded w-full h-max text-white`}
+            >
+              Change
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -7,19 +7,28 @@ const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
       let user = await User.findOne({ email: req.body.email });
+      // console.log(user);
       const userPass = CryptoJS.AES.decrypt(
         user.password,
         "mySecretKey"
       ).toString(CryptoJS.enc.Utf8);
-      if (user != null && req.body.password === userPass) {
-        var token = jwt.sign({ user }, process.env.JWT_SECRET);
-        res
-          .status(200)
-          .json({ success: true, name: user.name, email: user.email, token });
+      if (req.body.password === userPass) {
+        res.status(400).json({
+          success: false,
+          message: "New password can't be same as previous one.",
+        });
       } else {
-        res
-          .status(400)
-          .json({ success: false, message: "Invalid Credentials" });
+        let user = await User.findOneAndUpdate(
+          { email: req.body.email },
+          {
+            password: CryptoJS.AES.encrypt(
+              req.body.password,
+              "mySecretKey"
+            ).toString(),
+          },
+          { new: true }
+        );
+        res.status(200).json({ success: true, user });
       }
     } catch (e) {
       res.status(400).json({ success: false, message: e.message });
