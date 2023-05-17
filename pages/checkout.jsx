@@ -234,7 +234,7 @@ const Checkout = ({
   };
 
   return (
-    <section className="text-gray-600 body-font relative flex flex-col lg:flex-row w-full space-y-2 lg:space-y-0 lg:space-x-2 p-3 lg:p-14">
+    <section className="text-gray-600 body-font relative min-h-screen flex flex-col lg:flex-row w-full space-y-2 lg:space-y-0 lg:space-x-2 p-3 lg:p-14">
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
       <div className="container p-5 w-full lg:w-2/3">

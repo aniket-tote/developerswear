@@ -39,7 +39,7 @@ const About = () => {
   const [editBasicEnable, setEditBasicEnable] = useState(false);
 
   return (
-    <div className="py-4 px-36 flex bg-slate-100 space-x-4">
+    <div className="py-4 px-36 flex bg-slate-100 space-x-4 min-h-screen">
       <div className="left w-1/5">
         <div className="hello flex shadow bg-white p-2 space-x-2">
           <MdAccountCircle className="text-5xl text-indigo-500" />
@@ -276,6 +276,8 @@ const About = () => {
                   theme: "light",
                 });
                 fetchUserData();
+                e.target.password.value = "";
+                e.target.cpassword.value = "";
               } else {
                 toast.error(resData.message, {
                   position: "top-center",
@@ -290,62 +292,54 @@ const About = () => {
           }}
         >
           <div className="p-2 w-5/12">
-            <div className="relative">
-              <label
-                htmlFor="password"
-                className="leading-7 text-sm text-gray-600"
-              >
-                New Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                required
-                autoComplete="on"
-                // value={userData.phone}
-                // maxLength={10}
-                // onChange={(e) => {
-                //   handleInputChange(e);
-                // }}
-              />
-            </div>
+            <label
+              htmlFor="password"
+              className="leading-7 text-sm text-gray-600"
+            >
+              New Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="••••••••"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+              required
+              autoComplete="on"
+            />
           </div>
           <div className="p-2 w-5/12">
-            <div className="relative">
-              <label
-                htmlFor="cpassword"
-                className="leading-7 text-sm text-gray-600"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                name="cpassword"
-                id="cpassword"
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-                autoComplete="on"
-                // value={userData.phone}
-                // maxLength={10}
-                // onChange={(e) => {
-                //   handleInputChange(e);
-                // }}
-              />
-            </div>
+            <label
+              htmlFor="cpassword"
+              className="leading-7 text-sm text-gray-600"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="cpassword"
+              id="cpassword"
+              placeholder="••••••••"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              required
+              autoComplete="on"
+            />
           </div>
           <div className="p-2 w-2/12 flex justify-end items-end">
             <button
               type="submit"
               className={`px-4 py-2 bg-indigo-500 rounded w-full h-max text-white`}
             >
-              Change
+              Update
             </button>
           </div>
         </form>
+
+        <div className="p-2 w-full mt-8 border-t border-gray-200 text-center"></div>
+
+        <div className="text-xl font-bold mb-4 text-center md:text-left">
+          Your Address
+        </div>
       </div>
     </div>
   );

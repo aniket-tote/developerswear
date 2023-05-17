@@ -29,7 +29,7 @@ const Orders = () => {
     fetchData();
   }, []);
   return (
-    <div>
+    <div className="min-h-screen">
       <div className="flex justify-center w-full py-16">
         <span className="sm:text-3xl text-2xl font-medium title-font text-gray-900">
           Manage Your Orders

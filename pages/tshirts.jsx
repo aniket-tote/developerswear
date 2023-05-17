@@ -6,7 +6,7 @@ import Product from "@/models/Product";
 
 const Tshirts = ({ tshirts }) => {
   return (
-    <div className="p-3 lg:p-12 bg-slate-100">
+    <div className="p-3 lg:p-12 bg-slate-100 min-h-screen">
       <div className="flex flex-wrap justify-between w-full">
         {Object.keys(tshirts).length == 0 && (
           <p>No Tshirts in Stock. Will be coming soon. Stay Tuned!!</p>

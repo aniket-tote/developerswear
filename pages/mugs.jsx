@@ -5,7 +5,7 @@ import Product from "@/models/Product";
 
 const Mugs = ({ mugs }) => {
   return (
-    <div className="p-3 lg:p-12 bg-slate-100">
+    <div className="p-3 lg:p-12 bg-slate-100 min-h-screen">
       <div className="flex flex-wrap justify-between w-full">
         {Object.keys(mugs).length == 0 && (
           <p>No Mugs in Stock. Will be comming soon. Stay Tuned!!</p>
@@ -92,6 +92,9 @@ export async function getServerSideProps(context) {
       if (item.availableQty > 0) {
         mugs[item.title].color = [item.color];
         mugs[item.title].size = [item.size];
+      } else {
+        mugs[item.title].color = [];
+        mugs[item.title].size = [];
       }
     }
   }

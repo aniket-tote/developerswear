@@ -5,9 +5,11 @@ import Product from "@/models/Product";
 
 const Hoodies = ({ hoodies }) => {
   return (
-    <div className="p-3 lg:p-12 bg-slate-100">
+    <div className="p-3 lg:p-12 bg-slate-100 min-h-screen">
       <div className="flex flex-wrap justify-between w-full">
-        {Object.keys(hoodies).length == 0 && <p>No Hoodies in Stock. Will be comming soon. Stay Tuned!!</p>}
+        {Object.keys(hoodies).length == 0 && (
+          <p>No Hoodies in Stock. Will be comming soon. Stay Tuned!!</p>
+        )}
         {Object.keys(hoodies).map((item) => {
           return (
             <Link
@@ -94,6 +96,9 @@ export async function getServerSideProps(context) {
       if (item.availableQty > 0) {
         hoodies[item.title].color = [item.color];
         hoodies[item.title].size = [item.size];
+      } else {
+        hoodies[item.title].color = [];
+        hoodies[item.title].size = [];
       }
     }
   }
