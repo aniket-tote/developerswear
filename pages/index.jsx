@@ -7,8 +7,6 @@ import { GiHoodie, GiCoffeeMug } from "react-icons/gi";
 import { BsArrowRightShort } from "react-icons/bs";
 import { TbSticker } from "react-icons/tb";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
   return (
     <>

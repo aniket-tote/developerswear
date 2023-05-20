@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
 
 const Tshirts = ({ tshirts }) => {
   return (
     <div className="p-3 lg:p-12 bg-slate-100 min-h-screen">
-      <div className="flex flex-wrap justify-between w-full">
+      <div className="flex flex-wrap w-full">
         {Object.keys(tshirts).length == 0 && (
           <p>No Tshirts in Stock. Will be coming soon. Stay Tuned!!</p>
         )}
@@ -46,13 +46,8 @@ const Tshirts = ({ tshirts }) => {
                     return (
                       <button
                         key={e}
-                        className={`border border-gray-500 rounded-full w-6 h-6  focus:outline-none 
-                        ${e === "white" ? "bg-white" : ""}
-                        ${e === "black" ? "bg-black" : ""} 
-                        ${e === "maroon" ? "bg-red-700" : ""} 
-                        ${e === "green" ? "bg-green-700" : ""} 
-                        ${e === "grey" ? "bg-gray-400" : ""} 
-                        ${e === "navy" ? "bg-blue-900" : ""}`}
+                        style={{ backgroundColor: e }}
+                        className={`border border-gray-500 rounded-full w-6 h-6  focus:outline-none`}
                       ></button>
                     );
                   })}

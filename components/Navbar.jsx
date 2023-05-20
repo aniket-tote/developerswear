@@ -5,7 +5,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { MdAccountCircle } from "react-icons/md";
 import CartItem from "./CartItem";
 import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = ({
@@ -41,7 +41,7 @@ const Navbar = ({
   };
 
   return (
-    <div className="sticky top-0 bg-white z-10">
+    <div className="sticky top-0 bg-white z-10 ">
       <header className="text-gray-600 body-font shadow-md">
         <div className="container flex p-4 flex-wrap items-center justify-between">
           <Link
@@ -50,70 +50,77 @@ const Navbar = ({
           >
             <span className="ml-3 text-xl cursor-pointer">DevelopersWear</span>
           </Link>
-          <div className="md:order-2 justify-self-end btns flex space-x-2 items-center">
-            {user.value ? (
-              <MdAccountCircle
-                onMouseEnter={(e) => {
-                  setDropdown(!dropdown);
-                }}
-                className="text-3xl cursor-pointer"
-              />
-            ) : (
-              <Link href={"/login"}>
-                <button className="py-1 px-3 bg-gray-100 hover:bg-gray-200 rounded">
-                  Login
-                </button>
-              </Link>
-            )}
-            {dropdown && (
-              <div
-                onMouseLeave={(e) => {
-                  setDropdown(!dropdown);
-                }}
-                className="dropdown absolute rounded border-2 w-48 right-20 top-12 bg-white shadow-lg"
-              >
-                <div className=" flex flex-col text-sm">
-                  <Link href={"/about"} className="py-2 px-4 hover:bg-gray-200">
-                    My account
-                  </Link>
-                  <Link
-                    href={"/orders"}
-                    className="py-2 px-4 hover:bg-gray-200"
-                  >
-                    My Orders
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-start"
-                  >
-                    Logout
+          {!router.pathname.includes("/admin") && (
+            <div className="md:order-2 justify-self-end btns flex space-x-2 items-center">
+              {user.value ? (
+                <MdAccountCircle
+                  onMouseEnter={(e) => {
+                    setDropdown(!dropdown);
+                  }}
+                  className="text-3xl cursor-pointer"
+                />
+              ) : (
+                <Link href={"/login"}>
+                  <button className="py-1 px-3 bg-gray-100 hover:bg-gray-200 rounded">
+                    Login
                   </button>
+                </Link>
+              )}
+              {dropdown && (
+                <div
+                  onMouseLeave={(e) => {
+                    setDropdown(!dropdown);
+                  }}
+                  className="dropdown absolute rounded border-2 w-48 right-20 top-12 bg-white shadow-lg"
+                >
+                  <div className=" flex flex-col text-sm">
+                    <Link
+                      href={"/about"}
+                      className="py-2 px-4 hover:bg-gray-200"
+                    >
+                      My account
+                    </Link>
+                    <Link
+                      href={"/orders"}
+                      className="py-2 px-4 hover:bg-gray-200"
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-start"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-            <button
-              className="inline-flex items-center border-0 py-1 px-3 focus:outline-none bg-gray-100 hover:bg-gray-200 rounded"
-              onClick={() => {
-                setIsCartOpen(isCartOpen ? false : true);
-              }}
-            >
-              <BiCartAlt className="text-2xl " />
-            </button>
-          </div>
-          <nav className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-wrap space-x-7 md:space-x-12 lg:space-x-14 items-center text-base justify-center">
-            <Link href={"/tshirts"} className=" hover:text-gray-900">
-              T-shirts
-            </Link>
-            <Link href={"/hoodies"} className=" hover:text-gray-900">
-              Hoodies
-            </Link>
-            <Link href={"/mugs"} className=" hover:text-gray-900">
-              Mugs
-            </Link>
-            <Link href={"/stickers"} className=" hover:text-gray-900">
-              Stickers
-            </Link>
-          </nav>
+              )}
+              <button
+                className="inline-flex items-center border-0 py-1 px-3 focus:outline-none bg-gray-100 hover:bg-gray-200 rounded"
+                onClick={() => {
+                  setIsCartOpen(isCartOpen ? false : true);
+                }}
+              >
+                <BiCartAlt className="text-2xl " />
+              </button>
+            </div>
+          )}
+          {!router.pathname.includes("/admin") && (
+            <nav className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-wrap space-x-7 md:space-x-12 lg:space-x-14 items-center text-base justify-center">
+              <Link href={"/tshirts"} className=" hover:text-gray-900">
+                T-shirts
+              </Link>
+              <Link href={"/hoodies"} className=" hover:text-gray-900">
+                Hoodies
+              </Link>
+              <Link href={"/mugs"} className=" hover:text-gray-900">
+                Mugs
+              </Link>
+              <Link href={"/stickers"} className=" hover:text-gray-900">
+                Stickers
+              </Link>
+            </nav>
+          )}
         </div>
       </header>
 

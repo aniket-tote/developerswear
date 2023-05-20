@@ -45,13 +45,8 @@ const Hoodies = ({ hoodies }) => {
                     return (
                       <button
                         key={e}
-                        className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none ${
-                          e === "white" || e === "black"
-                            ? "bg-" + e
-                            : "bg-" + e + "-700"
-                        } ${e === "maroon" ? "bg-red-700" : ""} ${
-                          e === "grey" ? "bg-gray-400" : ""
-                        } ${e === "navy" ? "bg-blue-900" : ""}`}
+                        style={{ backgroundColor: e }}
+                        className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none`}
                       ></button>
                     );
                   })}

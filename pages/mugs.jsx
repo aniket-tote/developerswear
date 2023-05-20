@@ -1,12 +1,13 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
 
 const Mugs = ({ mugs }) => {
+
   return (
     <div className="p-3 lg:p-12 bg-slate-100 min-h-screen">
-      <div className="flex flex-wrap justify-between w-full">
+      <div className="flex flex-wrap w-full">
         {Object.keys(mugs).length == 0 && (
           <p>No Mugs in Stock. Will be comming soon. Stay Tuned!!</p>
         )}
@@ -32,29 +33,29 @@ const Mugs = ({ mugs }) => {
                   {mugs[item].title}
                 </h2>
                 <div className="sizes flex space-x-1">
-                  {mugs[item].size.map((e) => {
-                    return (
-                      <div className="size border border-gray-400 px-1" key={e}>
-                        {e}
-                      </div>
-                    );
-                  })}
+                  {mugs[item].size !== "" &&
+                    mugs[item].size.map((e) => {
+                      return (
+                        <div
+                          className="size border border-gray-400 px-1"
+                          key={e}
+                        >
+                          {e}
+                        </div>
+                      );
+                    })}
                 </div>
                 <div className="colors flex space-x-1">
-                  {mugs[item].color.map((e) => {
-                    return (
-                      <button
-                        key={e}
-                        className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none ${
-                          e === "white" || e === "black"
-                            ? "bg-" + e
-                            : "bg-" + e + "-700"
-                        } ${e === "maroon" ? "bg-red-700" : ""} ${
-                          e === "grey" ? "bg-gray-400" : ""
-                        } ${e === "navy" ? "bg-blue-900" : ""}`}
-                      ></button>
-                    );
-                  })}
+                  {mugs[item].color !== "" &&
+                    mugs[item].color.map((e) => {
+                      return (
+                        <button
+                          key={e}
+                          style={{ backgroundColor: e }}
+                          className={`border border-gray-500 rounded-full w-6 h-6 focus:outline-none`}
+                        ></button>
+                      );
+                    })}
                 </div>
                 <p className="mt-1">
                   ₹{mugs[item].price} <span className="line-through">₹999</span>
@@ -78,9 +79,6 @@ export async function getServerSideProps(context) {
 
   for (let item of products) {
     if (item.title in mugs) {
-      if (!mugs[item.title].size.includes(item.size) && item.availableQty > 0) {
-        mugs[item.title].size.push(item.size);
-      }
       if (
         !mugs[item.title].color.includes(item.color) &&
         item.availableQty > 0
@@ -91,11 +89,10 @@ export async function getServerSideProps(context) {
       mugs[item.title] = JSON.parse(JSON.stringify(item));
       if (item.availableQty > 0) {
         mugs[item.title].color = [item.color];
-        mugs[item.title].size = [item.size];
       } else {
         mugs[item.title].color = [];
-        mugs[item.title].size = [];
       }
+      mugs[item.title].size = [];
     }
   }
 

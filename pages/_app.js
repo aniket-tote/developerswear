@@ -193,7 +193,7 @@ export default function App({ Component, pageProps }) {
         buyNow={buyNow}
         {...pageProps}
       />
-      <Footer />
+      {!router.pathname.includes("/admin") && <Footer />}
     </div>
   );
 }

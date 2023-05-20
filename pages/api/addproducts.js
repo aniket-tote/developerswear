@@ -3,11 +3,25 @@ import connectDb from "../../middleware/mongoose";
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
-    try{
+    try {
       for (let i = 0; i < req.body.length; i++) {
+        let slug;
+        if (
+          req.body[i].category === "tshirt" ||
+          req.body[i].category === "hoodie"
+        ) {
+          slug =
+            req.body[i].title.replace(/ /g, "-") +
+            "-" +
+            req.body[i].size +
+            "-" +
+            req.body[i].color;
+        } else {
+          slug = req.body[i].title.replace(/ /g, "-");
+        }
         let p = new Product({
           title: req.body[i].title,
-          slug: req.body[i].slug,
+          slug: slug,
           desc: req.body[i].desc,
           img: req.body[i].img,
           category: req.body[i].category,
@@ -19,8 +33,8 @@ const handler = async (req, res) => {
         await p.save();
       }
       res.status(200).json({ success: true });
-    }catch(e){
-      res.status(400).json({ success: false, message: e.message });
+    } catch (e) {
+      res.status(500).json({ success: false, message: e.message });
     }
   } else {
     res
