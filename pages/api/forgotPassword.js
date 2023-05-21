@@ -49,6 +49,7 @@ const handler = async (req, res) => {
             <h2>Forgot Password</h2>
             <p>Click the link below to reset your password:</p>
             <a href="http://localhost:3000/forgotpass?email=${req.body.email}&token=${token}">Reset Password</a>
+            <p>Link is valid only for 10 mins</p>
           </div>
         `,
       };

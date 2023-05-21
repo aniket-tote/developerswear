@@ -7,6 +7,7 @@ import CartItem from "./CartItem";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UpdateProduct from "./UpdateProduct";
 
 const Navbar = ({
   user,
@@ -41,7 +42,7 @@ const Navbar = ({
   };
 
   return (
-    <div className="sticky top-0 bg-white z-10 ">
+    <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font shadow-md">
         <div className="container flex p-4 flex-wrap items-center justify-between">
           <Link

@@ -8,7 +8,7 @@ import { BiCartAlt } from "react-icons/bi";
 const AdminSidebar = () => {
   const router = useRouter();
   return (
-    <nav className="w-1/5 h-screen fixed left-0 top-15 shadow-xl bg-white z-20 flex flex-col p-2">
+    <nav className="w-1/5 h-screen fixed left-0 top-15 shadow-xl bg-white z-10 flex flex-col p-2">
       <Link
         href="/admin"
         className={`py-4 px-8 rounded flex items-center ${

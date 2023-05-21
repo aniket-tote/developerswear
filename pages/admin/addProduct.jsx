@@ -1,6 +1,6 @@
 import AdminSidebar from "@/components/AdminSidebar";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddProduct = () => {
@@ -15,11 +15,36 @@ const AddProduct = () => {
     availableQty: "",
   });
 
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    setSelectedImage(file);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "ml_default");
+
+      const responseCloudinary = await fetch(
+        "https://api.cloudinary.com/v1_1/dkyipn99j/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (responseCloudinary.ok) {
+        const data = await responseCloudinary.json();
+        const imageUrl = data.secure_url;
+
+        console.log("Image URL:", imageUrl);
+        setProduct((prev) => {
+          return { ...prev, img: imageUrl };
+        });
+      } else {
+        console.error("Error uploading image:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   const handleChange = (e) => {
@@ -31,109 +56,75 @@ const AddProduct = () => {
   return (
     <div className="flex justify-end bg-slate-100">
       <AdminSidebar />
-      <main className="p-8 w-4/5 flex flex-col">
-        <h1 className="text-2xl font-bold mb-4">Add Products</h1>
-
+      <main className="p-8 w-4/5 flex flex-wrap">
+        <div className="text-2xl font-bold mb-4 w-full">Add Products</div>
         <form
           method="POST"
-          className="w-full flex flex-wrap gap-4"
+          className="flex flex-wrap gap-4 w-3/4"
           onSubmit={async (e) => {
             e.preventDefault();
+
+            let updatedProduct;
             if (product.category === "mug") {
-              setProduct((prev) => {
-                return { ...prev, size: "" };
-              });
+              updatedProduct = { ...product, size: "" };
             }
             if (product.category === "sticker") {
-              setProduct((prev) => {
-                return { ...prev, size: "", color: "" };
-              });
+              updatedProduct = { ...product, size: "", color: "" };
             }
-            if (selectedImage) {
-              try {
-                const formData = new FormData();
-                formData.append("file", selectedImage);
-                formData.append("upload_preset", "ml_default");
 
-                const responseCloudinary = await fetch(
-                  "https://api.cloudinary.com/v1_1/dkyipn99j/image/upload",
+            const response = await fetch(
+              "http://localhost:3000/api/addproducts",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify([
                   {
-                    method: "POST",
-                    body: formData,
-                  }
-                );
-                if (responseCloudinary.ok) {
-                  const data = await responseCloudinary.json();
-                  const imageUrl = data.secure_url;
-
-                  console.log("Image URL:", imageUrl);
-                  setProduct((prev) => {
-                    return { ...prev, img: imageUrl };
-                  });
-
-                  const updatedProduct = { ...product, img: imageUrl };
-
-                  const response = await fetch(
-                    "http://localhost:3000/api/addproducts",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify([
-                        {
-                          ...updatedProduct,
-                        },
-                      ]),
-                    }
-                  );
-
-                  const responseData = await response.json();
-                  if (responseData.success) {
-                    toast.success(`Product Added`, {
-                      position: "top-center",
-                      autoClose: 2000,
-                      hideProgressBar: true,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "light",
-                    });
-                    setProduct({
-                      title: "",
-                      desc: "",
-                      img: "",
-                      category: "tshirt",
-                      size: "XS",
-                      color: "",
-                      price: "",
-                      availableQty: "",
-                    });
-                  } else {
-                    toast.error(responseData.message, {
-                      position: "top-center",
-                      autoClose: 2000,
-                      hideProgressBar: true,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "light",
-                    });
-                  }
-                } else {
-                  console.error("Error uploading image:", response.statusText);
-                }
-              } catch (error) {
-                console.error("Error uploading image:", error);
+                    ...updatedProduct,
+                  },
+                ]),
               }
+            );
+
+            const responseData = await response.json();
+            if (responseData.success) {
+              toast.success(`Product Added`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+              setProduct({
+                title: "",
+                desc: "",
+                img: "",
+                category: "tshirt",
+                size: "XS",
+                color: "",
+                price: "",
+                availableQty: "",
+              });
+              e.target.reset();
             } else {
-              console.log("No image selected");
+              toast.error(responseData.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             }
           }}
         >
-          <div className="w-1/3">
+          <div className="w-[49%]">
             <label
               htmlFor="title"
               className="block mb-1 text-sm font-medium text-gray-900 "
@@ -152,25 +143,7 @@ const AddProduct = () => {
               }}
             />
           </div>
-          <div className="w-1/3">
-            <label
-              htmlFor="desc"
-              className="block mb-1 text-sm font-medium text-gray-900 "
-            >
-              Description
-            </label>
-            <input
-              type="text"
-              name="desc"
-              id="desc"
-              value={product.desc}
-              className="w-full rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out text-gray-900"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
-          </div>
-          <div className="w-1/3">
+          <div className="w-[49%]">
             <label
               htmlFor="color"
               className="block mb-1 text-sm font-medium text-gray-900 "
@@ -181,14 +154,34 @@ const AddProduct = () => {
               type="text"
               name="color"
               id="color"
-              value={product.color}
+              disabled={product.category === "sticker"}
+              value={product.category === "sticker" ? "" : product.color}
+              className="w-full rounded border border-gray-300 focus:border-indigo-500 disabled:cursor-not-allowed disabled:bg-slate-200 focus:ring-2 focus:ring-indigo-200 outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out text-gray-900"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+            />
+          </div>
+          <div className="w-full">
+            <label
+              htmlFor="desc"
+              className="block mb-1 text-sm font-medium text-gray-900 "
+            >
+              Description
+            </label>
+            <textarea
+              type="text"
+              name="desc"
+              id="desc"
+              rows={5}
+              value={product.desc}
               className="w-full rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out text-gray-900"
               onChange={(e) => {
                 handleChange(e);
               }}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-[24%]">
             <label
               htmlFor="price"
               className="block mb-1 text-sm font-medium text-gray-900 "
@@ -206,7 +199,7 @@ const AddProduct = () => {
               }}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-[24%]">
             <label
               htmlFor="availableQty"
               className="block mb-1 text-sm font-medium text-gray-900 "
@@ -224,7 +217,7 @@ const AddProduct = () => {
               }}
             />
           </div>
-          <div className="">
+          <div className="w-[23%]">
             <label
               htmlFor="category"
               className="block mb-1 text-sm font-medium text-gray-900 "
@@ -238,7 +231,7 @@ const AddProduct = () => {
               onChange={(e) => {
                 handleChange(e);
               }}
-              className=" bg-white border border-gray-300 hover:border-indigo-500 px-4 py-2.5 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className=" bg-white w-full border border-gray-300 hover:border-indigo-500 px-4 py-2.5 rounded leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="tshirt">Tshirt</option>
               <option value="hoodie">Hoodie</option>
@@ -247,7 +240,7 @@ const AddProduct = () => {
             </select>
           </div>
           {(product.category === "tshirt" || product.category === "hoodie") && (
-            <div className="">
+            <div className="w-[23%]">
               <label
                 htmlFor="size"
                 className="block mb-1 text-sm font-medium text-gray-900 "
@@ -261,7 +254,7 @@ const AddProduct = () => {
                 onChange={(e) => {
                   handleChange(e);
                 }}
-                className=" bg-white border border-gray-300 hover:border-indigo-500 px-4 py-2.5 rounded leading-tight focus:outline-none focus:shadow-outline"
+                className=" bg-white w-full border border-gray-300 hover:border-indigo-500 px-4 py-2.5 rounded leading-tight focus:outline-none focus:shadow-outline"
               >
                 <option value="XS">XS</option>
                 <option value="S">S</option>
@@ -272,16 +265,17 @@ const AddProduct = () => {
               </select>
             </div>
           )}
-          <div>
-            <label htmlFor="imageUpload">Upload Image:</label>
+          <div className="flex items-center mt-5">
+            <label htmlFor="imageUpload">Upload Product Image:</label>
             <input
               type="file"
               id="imageUpload"
+              className="px-4 py-2 border border-indigo-500 rounded-lg ml-2"
               accept="image/*"
               onChange={handleImageChange}
             />
           </div>
-          <div className="w-full pl-[33%] mt-3">
+          <div className="w-full flex justify-center mt-3">
             <button
               type="submit"
               className="w-max h-max px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded text-white place-self-end mb-1"
@@ -290,6 +284,14 @@ const AddProduct = () => {
             </button>
           </div>
         </form>
+        <div className="w-1/4 flex justify-center">
+          <img
+            src={product.img}
+            alt=""
+            srcSet=""
+            className="bg-gray-500 w-64 h-64 rounded border border-gray-600"
+          />
+        </div>
       </main>
     </div>
   );

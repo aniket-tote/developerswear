@@ -157,7 +157,7 @@ export default function App({ Component, pageProps }) {
   };
 
   return (
-    <div>
+    <div className="">
       <LoadingBar
         color="rgb(99 102 241)"
         progress={progress}
