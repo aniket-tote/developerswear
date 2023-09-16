@@ -25,6 +25,7 @@ const Navbar = ({
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
+    sessionStorage.removeItem("userToken");
     setUser({ value: null });
     setKey(Math.random());
     setDropdown(!dropdown);
@@ -126,7 +127,7 @@ const Navbar = ({
       </header>
 
       <div
-        className={` sidebar flex flex-col space-y-5 overflow-y-scroll absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-slate-50 h-screen p-5 md:p-10 shadow-2xl transition-transform ease-in-out duration-500 ${
+        className={` sidebar flex flex-col space-y-5 overflow-y-scroll absolute top-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-slate-50 h-screen p-5 shadow-2xl transition-transform ease-in-out duration-500 ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

@@ -5,10 +5,6 @@ import Order from "@/models/Order";
 import Link from "next/link";
 
 const ViewOrders = ({ orders }) => {
-//   useEffect(() => {
-//     console.log(orders);
-//   }, []);
-
   return (
     <div className="flex justify-end bg-slate-100">
       <AdminSidebar />
@@ -67,7 +63,10 @@ const ViewOrders = ({ orders }) => {
                     <td className="p-3 w-1/12">{order.paymentInfo.method}</td>
                     <td className="p-3 w-1/12">{order.deliveryStatus}</td>
                     <td className="p-3 w-1/12">
-                      <Link href={`/orderDetail?id=${order.orderId}`} className="text-blue-500 underline">
+                      <Link
+                        href={`/orderDetail?id=${order.orderId}`}
+                        className="text-blue-500 underline"
+                      >
                         here
                       </Link>
                     </td>

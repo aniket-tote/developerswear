@@ -6,10 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [userData, setUserData] = useState({ email: "", password: "" });
+  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("userToken")) {
+    if (
+      localStorage.getItem("userToken") ||
+      sessionStorage.getItem("userToken")
+    ) {
       router.push("/");
     }
   }, []);
@@ -43,14 +47,26 @@ const Login = () => {
                     email: "",
                     password: "",
                   });
-                  localStorage.setItem(
-                    "userToken",
-                    JSON.stringify({
-                      token: resData.token,
-                      name: resData.name,
-                      email: resData.email,
-                    })
-                  );
+                  if (rememberMe) {
+                    localStorage.setItem(
+                      "userToken",
+                      JSON.stringify({
+                        token: resData.token,
+                        name: resData.name,
+                        email: resData.email,
+                      })
+                    );
+                  } else {
+                    sessionStorage.setItem(
+                      "userToken",
+                      JSON.stringify({
+                        token: resData.token,
+                        name: resData.name,
+                        email: resData.email,
+                      })
+                    );
+                  }
+
                   router.push("/");
 
                   toast.success(`Welcome Back! ${resData.name}`, {
@@ -131,6 +147,10 @@ const Login = () => {
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 "
                       required=""
+                      value={rememberMe}
+                      onChange={(e) => {
+                        setRememberMe(e.target.checked);
+                      }}
                     />
                   </div>
                   <div className="ml-3 text-sm">

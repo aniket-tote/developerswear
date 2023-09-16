@@ -31,7 +31,18 @@ const Checkout = ({
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (
+      sessionStorage.getItem("userToken") ||
+      localStorage.getItem("userToken")
+    ) {
+      setUserData((prev) => {
+        return {
+          ...prev,
+          name: user.value.name,
+          email: user.value.email,
+        };
+      });
+    } else {
       toast.warning(`You need to login first.`, {
         position: "top-center",
         autoClose: 2000,
@@ -41,15 +52,7 @@ const Checkout = ({
         theme: "light",
       });
       router.push("/");
-      return;
     }
-    setUserData((prev) => {
-      return {
-        ...prev,
-        name: user.value.name,
-        email: user.value.email,
-      };
-    });
   }, []);
 
   const handleInputChange = (e) => {

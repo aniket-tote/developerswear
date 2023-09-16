@@ -42,11 +42,11 @@ const handler = async (req, res) => {
 
       let mailOptions = {
         from: "anikettote2002@gmail.com",
-        to: "anikettote2001@gmail.com",
+        to: req.body.email,
         subject: "Reset Your Password",
         html: `
           <div>
-            <h2>Forgot Password</h2>
+            <h2>Forgot Password?</h2>
             <p>Click the link below to reset your password:</p>
             <a href="http://localhost:3000/forgotpass?email=${req.body.email}&token=${token}">Reset Password</a>
             <p>Link is valid only for 10 mins</p>

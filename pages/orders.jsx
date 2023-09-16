@@ -14,7 +14,10 @@ const Orders = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token: JSON.parse(localStorage.getItem("userToken")).token,
+        token: JSON.parse(
+          localStorage.getItem("userToken") ||
+            sessionStorage.getItem("userToken")
+        ).token,
       }),
     });
 
@@ -23,7 +26,10 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (
+      !sessionStorage.getItem("userToken") &&
+      !localStorage.getItem("userToken")
+    ) {
       router.push("/");
     }
     fetchData();

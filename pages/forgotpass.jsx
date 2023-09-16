@@ -9,7 +9,10 @@ const Forgotpass = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("userToken")) {
+    if (
+      localStorage.getItem("userToken") ||
+      sessionStorage.getItem("userToken")
+    ) {
       router.push("/");
     }
   }, []);

@@ -22,12 +22,21 @@ const CartItem = (props) => {
         </div>
         <div className="price">₹{props.price}</div>
         <div className="quantityManager flex items-center space-x-2">
-          <AiFillMinusCircle
-            onClick={() => {
-              props.removeFromCart(props.itemCode, 1);
-            }}
-            className="text-xl cursor-pointer"
-          />
+          {props.quantity === 1 ? (
+            <MdOutlineDeleteOutline
+              onClick={() => {
+                props.removeFromCart(props.itemCode, props.quantity);
+              }}
+              className="text-xl cursor-pointer"
+            />
+          ) : (
+            <AiFillMinusCircle
+              onClick={() => {
+                props.removeFromCart(props.itemCode, 1);
+              }}
+              className="text-xl cursor-pointer"
+            />
+          )}
           <div className="quantity">{props.quantity}</div>
           <AiFillPlusCircle
             onClick={() => {
@@ -45,12 +54,16 @@ const CartItem = (props) => {
             }}
             className="text-xl cursor-pointer"
           />
-          <MdOutlineDeleteOutline
-            onClick={() => {
-              props.removeFromCart(props.itemCode, props.quantity);
-            }}
-            className="text-xl cursor-pointer"
-          />
+          {props.quantity === 1 ? (
+            ""
+          ) : (
+            <MdOutlineDeleteOutline
+              onClick={() => {
+                props.removeFromCart(props.itemCode, props.quantity);
+              }}
+              className="text-xl cursor-pointer"
+            />
+          )}
         </div>
       </div>
     </div>

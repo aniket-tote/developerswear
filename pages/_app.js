@@ -34,7 +34,9 @@ export default function App({ Component, pageProps }) {
       localStorage.clear();
     }
 
-    const userToken = JSON.parse(localStorage.getItem("userToken"));
+    const userToken = JSON.parse(
+      localStorage.getItem("userToken") || sessionStorage.getItem("userToken")
+    );
     if (userToken) {
       setUser({ value: userToken });
     }

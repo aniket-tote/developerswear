@@ -14,7 +14,10 @@ const About = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token: JSON.parse(localStorage.getItem("userToken")).token,
+        token: JSON.parse(
+          localStorage.getItem("userToken") ||
+            sessionStorage.getItem("userToken")
+        ).token,
       }),
     });
 
@@ -23,10 +26,22 @@ const About = () => {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (
+      sessionStorage.getItem("userToken") ||
+      localStorage.getItem("userToken")
+    ) {
+      fetchUserData();
+    } else {
+      toast.warning(`You need to login first.`, {
+        position: "top-center",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
       router.push("/");
     }
-    fetchUserData();
   }, []);
 
   const [userData, setUserData] = useState({

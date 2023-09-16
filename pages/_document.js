@@ -4,9 +4,7 @@ import Script from "next/script";
 export default function Document() {
   return (
     <Html className="overflow-x-hidden">
-      <Head>
-        
-      </Head>
+      <Head></Head>
       <body>
         <Main />
         <NextScript />
