@@ -22,7 +22,7 @@ const Signup = () => {
     ) {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   return (
     <section className="bg-gray-50 min-h-screen">

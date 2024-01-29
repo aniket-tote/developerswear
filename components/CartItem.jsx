@@ -9,9 +9,9 @@ const CartItem = (props) => {
     <div className="p-2 flex items-center shadow-md bg-white my-2">
       <Link
         href={`/product/${props.itemCode}`}
-        className="img w-36 h-36 aspect-square flex justify-between items-center"
+        className="img w-36 h-36 aspect-square flex justify-between items-center relative"
       >
-        <img className="h-full rounded" src={props.img} />
+        <Image fill={true} src={props.img} alt="product_image" className="object-contain rounded" />
       </Link>
       <div className="right p-2 flex flex-col space-y-2">
         <div className="name&desc flex flex-col">

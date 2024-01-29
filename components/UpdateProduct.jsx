@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -292,12 +293,15 @@ const UpdateProduct = ({ setUpdateActive, updateProduct }) => {
             </div>
           </form>
           <div className="preview w-1/3 flex justify-center">
-            <img
-              src={product.img}
-              alt=""
-              srcSet=""
-              className="w-64 h-64 rounded border border-gray-500"
-            />
+          <div className="w-64 h-64 rounded border border-gray-500 relative">
+              <Image
+                src={product.img}
+                fill={true}
+                alt=""
+                srcSet=""
+                className="object-contain"
+              />
+            </div>
           </div>
         </div>
         <div

@@ -4,15 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ih1.redbubble.net',
-      },
-      {
-        protocol: 'https',
-        hostname: 'm.media-amazon.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.shopify.com',
+        hostname: 'res.cloudinary.com',
       },
     ],
     

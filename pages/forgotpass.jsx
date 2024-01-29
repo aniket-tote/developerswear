@@ -15,7 +15,7 @@ const Forgotpass = () => {
     ) {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   const [isLoading, setIsLoading] = useState(false);
 

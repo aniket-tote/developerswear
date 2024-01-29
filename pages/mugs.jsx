@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
+import Image from "next/image";
 
 const Mugs = ({ mugs }) => {
 
@@ -18,10 +19,11 @@ const Mugs = ({ mugs }) => {
               href={`/product/${mugs[item].slug}`}
               className="lg:w-[23.5%] md:w-1/2 m-2 bg-white p-4 w-full shadow hover:shadow-lg rounded"
             >
-              <div className="w-full h-64 flex justify-center">
-                <img
+              <div className="w-full h-64 flex justify-center relative">
+                <Image
                   alt="ecommerce"
-                  className="h-full rounded"
+                  fill={true}
+                  className="object-contain rounded"
                   src={mugs[item].img}
                 />
               </div>

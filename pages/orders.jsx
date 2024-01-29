@@ -33,7 +33,7 @@ const Orders = () => {
       router.push("/");
     }
     fetchData();
-  }, []);
+  }, [router]);
   return (
     <div className="min-h-screen">
       <div className="flex justify-center w-full py-16">
@@ -68,7 +68,7 @@ const Orders = () => {
           <tbody>
             {orders.map((order) => {
               return (
-                <tr className="hover:bg-gray-100 border-gray-300 border-y">
+                <tr key={order.orderId} className="hover:bg-gray-100 border-gray-300 border-y">
                   <td className="p-3 w-1/6">{order.orderId}</td>
                   <td className="p-3 w-1/6">{order.updatedAt.slice(0, 10)}</td>
                   <td className="p-3 w-1/6">{order.paymentInfo.method}</td>

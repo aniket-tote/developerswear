@@ -5,6 +5,7 @@ import { AiOutlineEdit, AiFillEdit } from "react-icons/ai";
 import { BiTrashAlt } from "react-icons/bi";
 import Product from "@/models/Product";
 import UpdateProduct from "@/components/UpdateProduct";
+import Image from "next/image";
 
 const AllProducts = ({ products }) => {
   const [updateActive, setUpdateActive] = useState(false);
@@ -64,12 +65,15 @@ const AllProducts = ({ products }) => {
                     <td className="p-3 w-1/12">{i + 1}</td>
                     <td className="p-3 w-3/12">{product.title}</td>
                     <td className="p-3 w-1/12">
-                      <img
-                        src={product.img}
-                        alt=""
-                        srcSet=""
-                        className="w-12"
-                      />
+                    <div className="w-12 h-12 relative">
+                        <Image
+                          src={product.img}
+                          fill={true}
+                          alt=""
+                          srcSet=""
+                          className="object-contain rounded"
+                        />
+                      </div>
                     </td>
                     <td className="p-3 w-1/12">{product.category}</td>
                     <td className="p-3 w-1/12">

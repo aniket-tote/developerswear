@@ -31,15 +31,16 @@ const Checkout = ({
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
-    if (
-      sessionStorage.getItem("userToken") ||
-      localStorage.getItem("userToken")
-    ) {
+    const userToken = JSON.parse(
+      localStorage.getItem("userToken") || sessionStorage.getItem("userToken")
+    );
+
+    if (userToken) {
       setUserData((prev) => {
         return {
           ...prev,
-          name: user.value.name,
-          email: user.value.email,
+          name: userToken.name,
+          email: userToken.email,
         };
       });
     } else {
@@ -53,7 +54,7 @@ const Checkout = ({
       });
       router.push("/");
     }
-  }, []);
+  }, [router,user]);
 
   const handleInputChange = (e) => {
     setUserData((prev) => {

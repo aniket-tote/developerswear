@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }) {
       setUser({ value: userToken });
     }
     setKey(Math.random());
-  }, [router.query]);
+  }, [router]);
 
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));

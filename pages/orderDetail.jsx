@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import mongoose from "mongoose";
 import Order from "@/models/Order";
+import { useRouter } from "next/router";
 
 const OrderDetail = ({ order }) => {
+  const router = useRouter();
   useEffect(() => {
     if (
       !sessionStorage.getItem("userToken") &&
@@ -10,7 +12,7 @@ const OrderDetail = ({ order }) => {
     ) {
       router.push("/");
     }
-  }, []);
+  }, [router]);
   return (
     <section className="text-gray-600 body-font overflow-hidden min-h-screen">
       <div className="container px-5 py-12 mx-auto">

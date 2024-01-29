@@ -2,6 +2,7 @@ import AdminSidebar from "@/components/AdminSidebar";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -285,12 +286,17 @@ const AddProduct = () => {
           </div>
         </form>
         <div className="w-1/4 flex justify-center">
-          <img
-            src={product.img}
-            alt=""
-            srcSet=""
+        <div
             className="bg-gray-500 w-64 h-64 rounded border border-gray-600"
-          />
+          >
+            <Image
+              src={product.img}
+              alt=""
+              srcSet=""
+              fill={true}
+              className="object-contain"
+            />
+          </div>
         </div>
       </main>
     </div>

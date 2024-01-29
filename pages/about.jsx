@@ -42,7 +42,7 @@ const About = () => {
       });
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   const [userData, setUserData] = useState({
     name: "",
