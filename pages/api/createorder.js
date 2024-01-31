@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
       const pincodes = Pincodes;
       
-      if (!pincodes.includes(parseInt(req.body.pincode))) {
+      if (!pincodes.includes(parseInt(req.body.userData.pincode))) {
         res.status(200).json({
           success: false,
           message: "We do not ship to this pincode currently",
