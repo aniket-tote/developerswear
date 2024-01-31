@@ -8,7 +8,7 @@ const About = () => {
   const router = useRouter();
 
   const fetchUserData = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_APP}/api/getuser`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const About = () => {
           onSubmit={async (e) => {
             e.preventDefault();
             const response = await fetch(
-              `${process.env.NEXT_PUBLIC_BASIC_APP}/api/basicUpdateUser`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/basicUpdateUser`,
               {
                 method: "POST",
                 headers: {
@@ -267,7 +267,7 @@ const About = () => {
               });
             } else {
               const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASIC_APP}/api/passwordUpdate`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/passwordUpdate`,
                 {
                   method: "POST",
                   headers: {

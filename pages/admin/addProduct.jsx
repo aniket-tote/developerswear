@@ -73,7 +73,7 @@ const AddProduct = () => {
             }
 
             const response = await fetch(
-              `${process.env.NEXT_PUBLIC_BASIC_APP}/api/addproducts`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/addproducts`,
               {
                 method: "POST",
                 headers: {

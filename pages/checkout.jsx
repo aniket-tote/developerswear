@@ -165,7 +165,7 @@ const Checkout = ({
   };
 
   const initiatePayment = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_APP}/api/createorder`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/createorder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -197,7 +197,7 @@ const Checkout = ({
       order_id: order.id,
       handler: async function (response) {
         const transRes = await fetch(
-          `${process.env.NEXT_PUBLIC_BASIC_APP}/api/posttransaction`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/posttransaction`,
           {
             method: "POST",
             headers: {
