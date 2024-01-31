@@ -2,6 +2,7 @@ import Razorpay from "razorpay";
 import Order from "../../models/Order";
 import Product from "../../models/Product";
 import connectDb from "../../middleware/mongoose";
+import Pincodes from "../../pincodes.json";
 
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY,
@@ -14,22 +15,15 @@ export default async function handler(req, res) {
       const { cart } = req.body;
       let cartTotal = 0;
 
-      const pincodeRes = await fetch(`http://localhost:3000/api/pincode`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ pincode: req.body.userData.pincode }),
-      });
-      let data = await pincodeRes.json();
-
-      if (!data.status) {
+      const pincodes = Pincodes;
+      
+      if (!pincodes.includes(parseInt(req.body.pincode))) {
         res.status(200).json({
           success: false,
           message: "We do not ship to this pincode currently",
         });
         return;
-      }
+      } 
 
       Object.keys(cart).forEach(async (e) => {
         cartTotal += cart[e].price * cart[e].qty;
