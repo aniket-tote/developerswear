@@ -7,7 +7,6 @@ const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
       let user = await User.findOne({ email: req.body.email });
-      // console.log(user);
       const userPass = CryptoJS.AES.decrypt(
         user.password,
         "mySecretKey"

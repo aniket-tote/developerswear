@@ -42,8 +42,6 @@ const UpdateProduct = ({ setUpdateActive, updateProduct }) => {
       if (responseCloudinary.ok) {
         const data = await responseCloudinary.json();
         const imageUrl = data.secure_url;
-
-        console.log("Image URL:", imageUrl);
         setProduct((prev) => {
           return { ...prev, img: imageUrl };
         });
@@ -89,7 +87,7 @@ const UpdateProduct = ({ setUpdateActive, updateProduct }) => {
               }
 
               const response = await fetch(
-                "http://localhost:3000/api/updateproduct",
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/updateproduct`,
                 {
                   method: "POST",
                   headers: {

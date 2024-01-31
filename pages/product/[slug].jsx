@@ -13,7 +13,7 @@ const Slug = ({ addToCart, tshirt, varients, buyNow, error }) => {
   const [availabilityMessage, setAvailabilityMessage] = useState("");
 
   const checkAvailability = async () => {
-    let response = await fetch(`http://localhost:3000/api/pincode`, {
+    let response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/pincode`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const Slug = ({ addToCart, tshirt, varients, buyNow, error }) => {
   };
 
   const changevarient = (color, size) => {
-    let url = `http://localhost:3000/product/${varients[color][size]["slug"]}`;
+    let url = `${process.env.NEXT_PUBLIC_BASE_URL}/product/${varients[color][size]["slug"]}`;
     window.location = url;
   };
 
@@ -84,19 +84,8 @@ const Slug = ({ addToCart, tshirt, varients, buyNow, error }) => {
                             onClick={() => {
                               changevarient(e, Object.keys(varients[e])[0]);
                             }}
-                            className={`rounded-full focus:outline-none ${
-                              e == "white" || e == "black"
-                                ? "bg-" + e
-                                : "bg-" + e + "-700"
-                            } ${e === "maroon" ? "bg-red-700" : ""} 
-                            ${e === "grey" ? "bg-gray-400" : ""} ${
-                              e === "navy" ? "bg-blue-900" : ""
-                            }
-                            ${
-                              e === tshirt.data.color
-                                ? "border-black border-2 w-8 h-8 "
-                                : "border-gray-300 border w-6 h-6 "
-                            }`}
+                            className={`rounded-full focus:outline-none w-6 h-6 border border-gray-500`}
+                            style={{ backgroundColor: e }}
                           ></button>
                         );
                       })}
@@ -232,7 +221,7 @@ const Slug = ({ addToCart, tshirt, varients, buyNow, error }) => {
 export async function getServerSideProps(context) {
   let error = null;
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.URL);
+    await mongoose.connect(process.env.MONGO_URL);
   }
 
   let product = await Product.findOne({ slug: context.params.slug });

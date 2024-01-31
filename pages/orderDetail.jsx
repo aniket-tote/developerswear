@@ -101,7 +101,7 @@ const OrderDetail = ({ order }) => {
 
 export async function getServerSideProps(context) {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.URL);
+    await mongoose.connect(process.env.MONGO_URL);
   }
   let order = await Order.findOne({ orderId: context.query.id });
   return {

@@ -38,8 +38,8 @@ const Signup = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
 
-                const res = await fetch("http://localhost:3000/api/signup", {
-                  method: "POST", // or 'PUT'
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`, {
+                  method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },

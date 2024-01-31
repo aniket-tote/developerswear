@@ -45,7 +45,7 @@ const Forgotpass = () => {
                     });
                   } else {
                     const response = await fetch(
-                      "http://localhost:3000/api/resetpassword",
+                      `${process.env.NEXT_PUBLIC_BASE_URL}/api/resetpassword`,
                       {
                         method: "POST",
                         headers: {
@@ -152,7 +152,7 @@ const Forgotpass = () => {
                   setIsLoading(true);
                   e.preventDefault();
                   const response = await fetch(
-                    "http://localhost:3000/api/forgotPassword",
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/forgotPassword`,
                     {
                       method: "POST",
                       headers: {

@@ -80,7 +80,6 @@ const Checkout = ({
   async function fetchPincodeData(pincode) {
     const url =
       "https://get-details-by-pin-code-india.p.rapidapi.com/detailsbypincode";
-    console.log();
     const options = {
       method: "POST",
       headers: {
@@ -166,7 +165,7 @@ const Checkout = ({
   };
 
   const initiatePayment = async () => {
-    const response = await fetch("http://localhost:3000/api/createorder", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_APP}/api/createorder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -198,7 +197,7 @@ const Checkout = ({
       order_id: order.id,
       handler: async function (response) {
         const transRes = await fetch(
-          "http://localhost:3000/api/posttransaction",
+          `${process.env.NEXT_PUBLIC_BASIC_APP}/api/posttransaction`,
           {
             method: "POST",
             headers: {

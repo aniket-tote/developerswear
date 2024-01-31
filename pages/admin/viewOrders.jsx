@@ -83,7 +83,7 @@ const ViewOrders = ({ orders }) => {
 
 export async function getServerSideProps() {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.URL);
+    await mongoose.connect(process.env.MONGO_URL);
   }
   let orders = await Order.find();
 

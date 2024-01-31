@@ -69,7 +69,7 @@ const Tshirts = ({ tshirts }) => {
 
 export async function getServerSideProps(context) {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(process.env.URL);
+    await mongoose.connect(process.env.MONGO_URL);
   }
   let products = await Product.find({ category: "tshirt" });
 

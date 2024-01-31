@@ -36,7 +36,6 @@ const AddProduct = () => {
         const data = await responseCloudinary.json();
         const imageUrl = data.secure_url;
 
-        console.log("Image URL:", imageUrl);
         setProduct((prev) => {
           return { ...prev, img: imageUrl };
         });
@@ -74,7 +73,7 @@ const AddProduct = () => {
             }
 
             const response = await fetch(
-              "http://localhost:3000/api/addproducts",
+              `${process.env.NEXT_PUBLIC_BASIC_APP}/api/addproducts`,
               {
                 method: "POST",
                 headers: {
